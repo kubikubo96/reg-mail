@@ -12,9 +12,7 @@ jQuery(document).ready(function ($) {
     chrome.storage.sync.get('config', function (result) {
         config = result.config;
         console.log("🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍");
-        console.log("          Get Account In chrome.storage.sync content      🏍");
-
-        console.log("🏍   ConfigDefine:                                        🏍");
+        console.log("🏍ConfigDefine:                                            🏍");
         console.log(config);
         console.log("🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍");
 
@@ -150,8 +148,8 @@ jQuery(document).ready(function ($) {
                                             $('form input[name=ConfirmPasswd]').bind('autotyped', function () {
                                             }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
 
-                                            //Checked xem mật khẩu
                                             setTimeout(() => {
+                                                //Checked xem mật khẩu
                                                 $('p.extension-show-info').remove();
                                                 var sHtml = '<p class="extension-show-info">Bật hiển thị mật khẩu</p>';
                                                 $(sHtml).appendTo('body');
@@ -196,8 +194,8 @@ jQuery(document).ready(function ($) {
                                                                                     }).autotype(sNumGeted, { delay: randomIntFromRange(80, 200) });
 
                                                                                     setTimeout(() => {
-                                                                                        $('p.extension-show-info').remove();
                                                                                         //Click tiep theo sau khi nhap so dien thoai
+                                                                                        $('p.extension-show-info').remove();
                                                                                         if ($('.dG5hZc .qhFLie button')) {
                                                                                             $('.dG5hZc .qhFLie button').click()
 
@@ -205,7 +203,7 @@ jQuery(document).ready(function ($) {
                                                                                                 var currentUrl = window.location.href;
                                                                                                 if (currentUrl.includes('webgradsidvphone')) {
                                                                                                     /**************************/
-                                                                                                    //Tiep tuc lay PHONE_NUMBER
+                                                                                                    //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
                                                                                                     /**************************/
                                                                                                 } else {
                                                                                                     window.sPhoneCanUse = true;
@@ -275,7 +273,6 @@ jQuery(document).ready(function ($) {
                                                                                                                                                         $('p.extension-show-info').remove();
                                                                                                                                                         var sHtml = '<p class="extension-show-info">Nhập ngày sinh</p>';
                                                                                                                                                         $(sHtml).appendTo('body');
-
                                                                                                                                                         $('input[name=day]').val("");
                                                                                                                                                         setTimeout(() => {
                                                                                                                                                             $('input[name=day]').bind('autotyped', function () {
