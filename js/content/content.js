@@ -17,24 +17,45 @@ jQuery(document).ready(function ($) {
         console.log("🏍   ConfigDefine:                                        🏍");
         console.log(config);
         console.log("🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍");
-        if (config.start == "yes") {
 
+        if (config.start == "no") {
+            showNotyNormal("CHÚC MỪNG đã tạo xong danh sách gmail.")
+        }
+
+        if (config.account == '') {
+            showNotyNormal("Danh sách gmail cần tạo đang rỗng", "error");
+            return false;
+        }
+
+        if (config.start == "yes") {
             var sUrlFull = window.location.href;
             var sFlowEntry = getUrlParameter('flowEntry', sUrlFull);
             var sDomain = location.hostname;
-            var sAccount = random_item(config.account.split(/\r?\n/));
+            var sAccounts = config.account.split(/\r?\n/);
+            var sAccount = '';
+            console.log(sAccounts);
+            console.log("***************");
+            //Set tổng số gmail cần tạo
+            if (config.total == 0) {
+                config.total = sAccounts.length;
+                chrome.storage.sync.set({
+                    config: config
+                });
+            }
+            sAccount = sAccounts[config.position];
+
 
             //Chuyển hướng về trang Google nếu đang ở sai trang
             if (sDomain != sAc && sDomain != sGo) {
                 showNotyDuration('Đang Chuyển hướng về trang chủ Google');
                 setTimeout(() => {
-                    window.location.href = 'https://' + sGo;
+                    window.location.href = 'https://' + sGo * 3;
                 }, sTe);
             }
 
             //Xử lý nếu đang ở trang chủ Google
             if (sDomain == sGo) {
-                showNotyDuration('Đang Chuyển hướng trang đăng nhập', sTe);
+                showNotyDuration('Đang Chuyển hướng trang đăng nhập', sTe * 10);
                 setTimeout(() => {
                     var btnLogin = $('body .gb_Se a.gb_3');
                     if (btnLogin?.length > 0) {
@@ -47,8 +68,6 @@ jQuery(document).ready(function ($) {
 
             //Xử lý nếu đang ở trang đăng nhập
             if (sFlowEntry == "ServiceLogin" || sUrlFull.includes('identifier')) {
-                console.log("Đang ở trang đăng nhập");
-                console.log("********");
                 showNotyDuration('Đang chuyển hướng trang Tạo Tài Khoản', sTe * 2);
                 setTimeout(() => {
                     if ($('.daaWTb .VfPpkd-LgbsSe').length > 0) {
@@ -70,21 +89,8 @@ jQuery(document).ready(function ($) {
 
             //Xử lý nếu đang ở trang đăng ký
             if (sFlowEntry == "SignUp") {
-                console.log("Đang ở trang Đăng Ký");
-                console.log("********");
 
                 if (sAccount != '') {
-                    // if (sEmail != '' && sPassWord != '') {
-                    //     flag = true;
-                    //     chrome.storage.sync.get('config', function (result) {
-                    //         var initConfig = result.config;
-
-                    //         initConfig.data = [];
-                    //         chrome.storage.sync.set({
-                    //             config: initConfig
-                    //         });
-                    //     });
-                    // }
 
                     var aAccount = sAccount.split('|');
                     var sEmail = $.trim(aAccount[0]);
@@ -96,40 +102,59 @@ jQuery(document).ready(function ($) {
                     //Show gmail create
                     $('p.extension-show-comment').remove();
                     var sHtml = '<p class="extension-show-comment">' +
-                        '- Email:               ' + '<span class="color-yellow">' + sEmail + '</span>' + '<br>' +
+                        '- Họ:                  ' + '<span class="color-yellow">' + sLastName + '</span>' + '<br>' +
+                        '- Tên:                 ' + '<span class="color-yellow">' + sFirstName + '</span>' + '<br>' +
+                        '- Email:               ' + '<span class="color-yellow">' + sEmail + '@gmail.com' + '</span>' + '<br>' +
                         '- Mật Khẩu:            ' + '<span class="color-yellow">' + sPassWord + '</span>' + '<br>' +
-                        '- Email Khôi Phục:     ' + '<span class="color-yellow">' + sEmailRecovery + '</span>' +
                         '</p>';
                     $(sHtml).appendTo('body');
 
                     setTimeout(() => {
                         setTimeout(() => {
                             //Nhap Last Name: Họ
+                            $('p.extension-show-info').remove();
+                            var sHtml = '<p class="extension-show-info">Nhập họ</p>';
+                            $(sHtml).appendTo('body');
                             $('form input[name=lastName]').bind('autotyped', function () {
                             }).autotype(sLastName, { delay: randomIntFromRange(80, 200) });
 
                             setTimeout(() => {
                                 //Nhap First Name: Tên
+                                $('p.extension-show-info').remove();
+                                var sHtml = '<p class="extension-show-info">Nhập tên</p>';
+                                $(sHtml).appendTo('body');
                                 $('form input[name=firstName]').bind('autotyped', function () {
                                 }).autotype(sFirstName, { delay: randomIntFromRange(80, 200) });
 
                                 setTimeout(() => {
                                     //Nhap User Name: Email
+                                    $('p.extension-show-info').remove();
+                                    var sHtml = '<p class="extension-show-info">Nhập Email</p>';
+                                    $(sHtml).appendTo('body');
                                     $('form input[name=Username]').bind('autotyped', function () {
                                     }).autotype(sEmail, { delay: randomIntFromRange(80, 200) });
 
                                     setTimeout(() => {
                                         //Nhap Mật khẩu
+                                        $('p.extension-show-info').remove();
+                                        var sHtml = '<p class="extension-show-info">Nhập mật khẩu</p>';
+                                        $(sHtml).appendTo('body');
                                         $('form input[name=Passwd]').bind('autotyped', function () {
                                         }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
 
                                         setTimeout(() => {
                                             //Nhap Lại Mật khẩu
+                                            $('p.extension-show-info').remove();
+                                            var sHtml = '<p class="extension-show-info">Nhập lại mật khẩu</p>';
+                                            $(sHtml).appendTo('body');
                                             $('form input[name=ConfirmPasswd]').bind('autotyped', function () {
                                             }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
 
                                             //Checked xem mật khẩu
                                             setTimeout(() => {
+                                                $('p.extension-show-info').remove();
+                                                var sHtml = '<p class="extension-show-info">Bật hiển thị mật khẩu</p>';
+                                                $(sHtml).appendTo('body');
                                                 if ($('input.VfPpkd-muHVFf-bMcfAe')) {
                                                     $('input.VfPpkd-muHVFf-bMcfAe').prop('checked', true);
                                                 }
@@ -138,8 +163,9 @@ jQuery(document).ready(function ($) {
                                                     if ($('button.nCP5yc')) {
                                                         $('button.nCP5yc').click();
 
-                                                        $('p.extension-show-comment').remove();
-                                                        showNotyNormal("Đang lấy số điện thoại")
+                                                        $('p.extension-show-info').remove();
+                                                        var sHtml = '<p class="extension-show-info">Đang lấy số điện thoại</p>';
+                                                        $(sHtml).appendTo('body');
                                                     }
 
                                                     window.sNumCallPhone = 0;
@@ -149,21 +175,18 @@ jQuery(document).ready(function ($) {
                                                     window.loadingGetCode = false;
                                                     setInterval(() => {
                                                         if (window.sPhoneCanUse == false) {
-                                                            console.log("Call Ajax Get Phone");
-                                                            console.log("******************");
                                                             $.ajax({
                                                                 type: 'GET',
                                                                 url: dUrlGetNumber,
                                                                 success: function (data) {
-                                                                    console.log("Get Phone Success");
-                                                                    console.log("*******************");
                                                                     if (data.ResponseCode == 0 || data.Msg == "OK") {
                                                                         var sIdGeted = data.Result.Id;
                                                                         var sUrlGetCode = dUrlGetCode + sIdGeted;
                                                                         var sNumGeted = data.Result.Number;
                                                                         sNumGeted = "+84" + sNumGeted;
-                                                                        showNotyNormal("Đang lấy số điện thoại")
-                                                                        showNotyNormal("Lấy Số thành công: " + sNumGeted);
+                                                                        $('p.extension-show-info').remove();
+                                                                        var sHtml = '<p class="extension-show-info">Lấy Thành công: ' + sNumGeted + '</p>';
+                                                                        $(sHtml).appendTo('body');
                                                                         setTimeout(() => {
                                                                             //Nhập số điện thoại
                                                                             if ($('#phoneNumberId')) {
@@ -173,6 +196,7 @@ jQuery(document).ready(function ($) {
                                                                                     }).autotype(sNumGeted, { delay: randomIntFromRange(80, 200) });
 
                                                                                     setTimeout(() => {
+                                                                                        $('p.extension-show-info').remove();
                                                                                         //Click tiep theo sau khi nhap so dien thoai
                                                                                         if ($('.dG5hZc .qhFLie button')) {
                                                                                             $('.dG5hZc .qhFLie button').click()
@@ -199,18 +223,17 @@ jQuery(document).ready(function ($) {
                                                                                                                     type: 'GET',
                                                                                                                     url: sUrlGetCode,
                                                                                                                     success: function (data) {
-                                                                                                                        window.sNumCallPhone = -100;
                                                                                                                         window.loadingGetCode = false;
-                                                                                                                        console.log("Get Code Success");
-                                                                                                                        console.log(data);
                                                                                                                         if (data.Result.Code) {
+                                                                                                                            window.sNumCallPhone = -100;
                                                                                                                             window.sGetCodeSuccess = true;
                                                                                                                         }
-                                                                                                                        localStorage.setItem("GET_CODE_SUCCESS", JSON.stringify(data));
-                                                                                                                        if (data.ResponseCode == 0 || data.ResponseCode == 0 || data.Msg == "OK" || data.Msg == "Đã nhận được code") {
+                                                                                                                        if (data.ResponseCode == 0 || data.Msg == "OK" || data.Msg == "Đã nhận được code") {
                                                                                                                             var sCodeNum = data.Result.Code;
                                                                                                                             $('p.extension-show-comment').remove();
-                                                                                                                            showNotyNormal("lấy CODE thành công: " + sCodeNum);
+                                                                                                                            var sHtml = '<p class="extension-show-comment">' +
+                                                                                                                                '- Lấy CODE thành công: ' + '<span class="color-yellow">' + sCodeNum + '</span>' + '<br>';
+                                                                                                                            $(sHtml).appendTo('body');
                                                                                                                             if (sCodeNum) {
                                                                                                                                 $('input#code').bind('autotyped', function () {
                                                                                                                                 }).autotype(sCodeNum, { delay: randomIntFromRange(80, 200) });
@@ -222,49 +245,67 @@ jQuery(document).ready(function ($) {
                                                                                                                                         $('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ').click()
 
                                                                                                                                         setTimeout(() => {
+                                                                                                                                            var sDay = random_item(dDay);
+                                                                                                                                            var sMonth = randomIntFromRange(1, 12);
+                                                                                                                                            var sYear = randomIntFromRange(1988, 2002);
+                                                                                                                                            var sMale = randomIntFromRange(1, 2);
+                                                                                                                                            var tMale = sMale == 1 ? "Nam" : "Nữ";
                                                                                                                                             $('p.extension-show-comment').remove();
-                                                                                                                                            showNotyNormal("Nhập các thông tin chi tiết");
+                                                                                                                                            var sHtml = '<p class="extension-show-comment">' +
+                                                                                                                                                '- Email Khôi phục:         ' + '<span class="color-yellow">' + sEmailRecovery + '</span>' + '<br>' +
+                                                                                                                                                '- Ngày/Tháng/Năm Sinh:     ' + '<span class="color-yellow">' + sDay + '/' + sMonth + '/' + sYear + '</span>' + '<br>' +
+                                                                                                                                                '- Giới tính:               ' + '<span class="color-yellow">' + tMale + '</span>' + '<br>' +
+                                                                                                                                                '</p>';
+                                                                                                                                            $(sHtml).appendTo('body');
+
                                                                                                                                             var sCurrentUrl = window.location.href;
                                                                                                                                             if (sCurrentUrl.includes('webpersonaldetails')) {
                                                                                                                                                 //Xoa so dien thoai
                                                                                                                                                 $('#phoneNumberId').val('');
                                                                                                                                                 setTimeout(() => {
-                                                                                                                                                    $('p.extension-show-comment').remove();
-                                                                                                                                                    showNotyNormal("Nhập Email khôi phục");
                                                                                                                                                     //Nhap email khoi phuc
+                                                                                                                                                    $('p.extension-show-info').remove();
+                                                                                                                                                    var sHtml = '<p class="extension-show-info">Nhập Email khôi phục</p>';
+                                                                                                                                                    $(sHtml).appendTo('body');
                                                                                                                                                     $('input[name=recoveryEmail]').bind('autotyped', function () {
                                                                                                                                                     }).autotype(sEmailRecovery, { delay: randomIntFromRange(80, 200) });
 
                                                                                                                                                     setTimeout(() => {
-                                                                                                                                                        $('p.extension-show-comment').remove();
-                                                                                                                                                        showNotyNormal("Nhập Ngày sinh");
                                                                                                                                                         //Nhap ngay sinh
+                                                                                                                                                        $('p.extension-show-info').remove();
+                                                                                                                                                        var sHtml = '<p class="extension-show-info">Nhập ngày sinh</p>';
+                                                                                                                                                        $(sHtml).appendTo('body');
+
                                                                                                                                                         $('input[name=day]').val("");
                                                                                                                                                         setTimeout(() => {
                                                                                                                                                             $('input[name=day]').bind('autotyped', function () {
-                                                                                                                                                            }).autotype(random_item(dNumMonth), { delay: randomIntFromRange(80, 200) });
+                                                                                                                                                            }).autotype(sDay, { delay: randomIntFromRange(80, 200) });
 
                                                                                                                                                             setTimeout(() => {
                                                                                                                                                                 //Nhap thang sinh
-                                                                                                                                                                $('p.extension-show-comment').remove();
-                                                                                                                                                                showNotyNormal("Nhập Tháng sinh");
-                                                                                                                                                                $('#month').val(randomIntFromRange(1, 12)).change();
+                                                                                                                                                                $('p.extension-show-info').remove();
+                                                                                                                                                                var sHtml = '<p class="extension-show-info">Nhập tháng sinh</p>';
+                                                                                                                                                                $(sHtml).appendTo('body');
+                                                                                                                                                                $('#month').val(sMonth).change();
 
                                                                                                                                                                 setTimeout(() => {
                                                                                                                                                                     //Nhap nam sinh
-                                                                                                                                                                    $('p.extension-show-comment').remove();
-                                                                                                                                                                    showNotyNormal("Nhập Năm sinh");
+                                                                                                                                                                    $('p.extension-show-info').remove();
+                                                                                                                                                                    var sHtml = '<p class="extension-show-info">Nhập năm sinh</p>';
+                                                                                                                                                                    $(sHtml).appendTo('body');
                                                                                                                                                                     $('input[name=year]').val();
                                                                                                                                                                     setTimeout(() => {
-                                                                                                                                                                        $('input[name=year]').val(randomIntFromRange(1988, 2002));
+                                                                                                                                                                        $('input[name=year]').val(sYear).change();
 
                                                                                                                                                                         setTimeout(() => {
-                                                                                                                                                                            $('p.extension-show-comment').remove();
-                                                                                                                                                                            showNotyNormal("Nhập Giới Tính");
                                                                                                                                                                             //Nhap gioi tinh
+                                                                                                                                                                            $('p.extension-show-info').remove();
+                                                                                                                                                                            var sHtml = '<p class="extension-show-info">Nhập giới tính</p>';
+                                                                                                                                                                            $(sHtml).appendTo('body');
                                                                                                                                                                             $('#gender').val(randomIntFromRange(1, 2)).change();
 
                                                                                                                                                                             setTimeout(() => {
+                                                                                                                                                                                $('p.extension-show-info').remove();
                                                                                                                                                                                 $('p.extension-show-comment').remove();
                                                                                                                                                                                 showNotyNormal("Chuyển đến điều khoản Google");
                                                                                                                                                                                 //Click tiep theo => Chuyển đến điều khoản Google
@@ -273,30 +314,48 @@ jQuery(document).ready(function ($) {
                                                                                                                                                                                     setTimeout(() => {
                                                                                                                                                                                         $('p.extension-show-comment').remove();
                                                                                                                                                                                         showNotyNormal("Đồng Ý Với Điều Khoản Google");
-                                                                                                                                                                                        //Click dong y dieu khoan Google
-                                                                                                                                                                                        if ($('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc')) {
-                                                                                                                                                                                            $('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc').click();
+
+                                                                                                                                                                                        setTimeout(() => {
+                                                                                                                                                                                            //Scroll đọc điều khoản google
+                                                                                                                                                                                            scrollToBottom();
+                                                                                                                                                                                        }, 4000);
+                                                                                                                                                                                        //Tăng position khi tạo gmail vị trí hiện tại thành công
+                                                                                                                                                                                        config.position = config.position + 1;
+                                                                                                                                                                                        if (config.position >= config.total) {
+                                                                                                                                                                                            config.start = 'no';
                                                                                                                                                                                         }
-                                                                                                                                                                                    }, 10000);
+                                                                                                                                                                                        chrome.storage.sync.set({
+                                                                                                                                                                                            config: config
+                                                                                                                                                                                        });
+
+                                                                                                                                                                                        setTimeout(() => {
+                                                                                                                                                                                            //Click dong y dieu khoan Google
+                                                                                                                                                                                            if ($('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc')) {
+                                                                                                                                                                                                $('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc').click();
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }, sTe * 3);
+
+                                                                                                                                                                                    }, sTe);
                                                                                                                                                                                 }
                                                                                                                                                                             }, 10000);
 
-                                                                                                                                                                        }, 5000);
-                                                                                                                                                                    }, 5000);
+                                                                                                                                                                        }, sTe);
 
-                                                                                                                                                                }, 5000);
+                                                                                                                                                                    }, sTe);
 
-                                                                                                                                                            }, 5000);
+                                                                                                                                                                }, sTe);
 
-                                                                                                                                                        }, 5000);
+                                                                                                                                                            }, sTe);
+
+                                                                                                                                                        }, sTe);
 
                                                                                                                                                     }, 12000);
 
-                                                                                                                                                }, 5000);
+                                                                                                                                                }, sTe);
                                                                                                                                             }
                                                                                                                                         }, sTe);
                                                                                                                                     }
-                                                                                                                                }, 5000);
+                                                                                                                                }, sTe);
                                                                                                                             }
                                                                                                                         } else {
                                                                                                                             showNotyNormal("Lấy code Thất bại, chờ lấy lại. Thử lại lần: " + window.sNumCallPhone, "error");
@@ -350,6 +409,10 @@ jQuery(document).ready(function ($) {
             }
         }
     });
+
+    function scrollToBottom() {
+        $('html, body').animate({ scrollTop: randomIntFromRange(1000, 2000) }, randomIntFromRange(6000, 9000));
+    }
 
     function showNotyDuration(content, duration = sTe) {
         $('p.extension-show-comment').remove();

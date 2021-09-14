@@ -1,0 +1,5 @@
+1. refactor code.
+2. thêm chức năng random danh sách email cần tạo.
+3. lọc số điện thoại đã lấy.
+4. autoscroll khi đọc điều khoản google.
+5. viết tool chăm sóc gmail.
