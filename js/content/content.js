@@ -18,6 +18,14 @@ jQuery(document).ready(function ($) {
 
         if (config.start == "no") {
             showNotyNormal("CHÚC MỪNG đã tạo xong danh sách gmail.")
+            var newConfig = config;
+            newConfig.case_stack = 1;
+            newConfig.position = 0;
+            newConfig.total = 0;
+            newConfig.start = "yes";
+            chrome.storage.sync.set({
+                config: newConfig
+            })
         }
 
         if (config.account == '') {
