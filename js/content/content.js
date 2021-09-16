@@ -96,7 +96,7 @@ jQuery(document).ready(function ($) {
             //Xử lý nếu đang ở trang đăng ký
             if (sFlowEntry == "SignUp") {
 
-                if (sAccount != '') {
+                if (sAccount) {
 
                     var aAccount = sAccount.split('|');
                     var sEmail = $.trim(aAccount[0]);
@@ -411,6 +411,11 @@ jQuery(document).ready(function ($) {
                         }, 7000);
 
                     }, 7000);
+                } else {
+                    showNotyNormal('Không lấy được tài khoản google', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'https://' + sGo;
+                    }, 5000);
                 }
             }
         }
