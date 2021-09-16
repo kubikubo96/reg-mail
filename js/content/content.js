@@ -69,7 +69,7 @@ jQuery(document).ready(function ($) {
                     } else {
                         window.location.href = sLg;
                     }
-                }, sTe);
+                }, sTe * 10);
             }
 
             //Xử lý nếu đang ở trang đăng nhập
