@@ -4,3 +4,5 @@ Chạy trình duyệt Chrome mà không có CORS: Chạy 1 trong 2 lệnh bên d
 "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --disable-gpu --user-data-dir=~/chromeTemp
 
 "C:\Program Files\Google\Chrome\Application\chrome.exe" --disable-web-security --disable-gpu --user-data-dir=~/chromeTemp
+
+"C:\Program Files (x86)\CocCoc\Browser\Application\browser.exe" --disable-web-security --disable-gpu --user-data-dir=~/chromeTemp

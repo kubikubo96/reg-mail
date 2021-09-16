@@ -55,7 +55,7 @@ jQuery(document).ready(function ($) {
             if (sDomain != sAc && sDomain != sGo) {
                 showNotyDuration('Đang Chuyển hướng về trang chủ Google');
                 setTimeout(() => {
-                    window.location.href = 'https://' + sGo * 3;
+                    window.location.href = 'https://' + sGo;
                 }, sTe);
             }
 
@@ -219,6 +219,7 @@ jQuery(document).ready(function ($) {
                                                                                                     setInterval(() => {
                                                                                                         if (window.sGetCodeSuccess == false) {
                                                                                                             if (window.sNumCallPhone >= 5) {
+                                                                                                                showNotyDuration("Lấy code thất bại. đang chuyển hướng Google: ", 1000 * 120);
                                                                                                                 setTimeout(() => {
                                                                                                                     window.location.href = 'https://' + sGo;
                                                                                                                 }, 1000 * 120);
@@ -376,7 +377,7 @@ jQuery(document).ready(function ($) {
                                                                                                                 })
                                                                                                             }
                                                                                                         }
-                                                                                                    }, 5000);
+                                                                                                    }, 1000 * 30);
                                                                                                 }
                                                                                             }, 5000);
                                                                                         }
