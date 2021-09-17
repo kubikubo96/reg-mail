@@ -328,6 +328,7 @@ jQuery(document).ready(function ($) {
     //Xử lý Get Code
     function getCodeAPI(sUrlGetCode, sEmailRecovery) {
         window.sPhoneCanUse = true;
+        $('p.extension-show-info').remove();
         showNotyNormal("Vui lòng chờ lấy code");
         setInterval(() => {
             if (window.sGetCodeSuccess == false) {
