@@ -45,7 +45,7 @@ jQuery(document).ready(function ($) {
 
             //Chuyển hướng về trang Google nếu đang ở sai trang
             if (sDomain != sAc && sDomain != sGo) {
-                showNotyDuration('Đang Chuyển hướng về trang đăng ký', sTe);
+                showNotyDuration('Đang Chuyển hướng về trang Đăng ký', sTe);
                 setTimeout(() => {
                     window.location.href = sUp;
                 }, sTe);
@@ -53,7 +53,7 @@ jQuery(document).ready(function ($) {
 
             //Xử lý nếu đang ở trang chủ Google
             if (sDomain == sGo) {
-                showNotyDuration('Đang Chuyển hướng trang đăng ký', sTe * 2);
+                showNotyDuration('Đang Chuyển hướng trang Đăng ký', sTe * 2);
                 setTimeout(() => {
                     // var btnLogin = $('body .gb_Se a.gb_3');
                     // if (btnLogin?.length > 0) {
@@ -76,7 +76,7 @@ jQuery(document).ready(function ($) {
             var sFlowEntry = getUrlParameter('flowEntry', sUrlFull);
             if (sFlowEntry == "ServiceLogin" || sUrlFull.includes('identifier')) {
                 console.log("Đang ở trang đăng nhập");
-                showNotyDuration('Đang chuyển hướng trang Tạo Tài Khoản', sTe * 2);
+                showNotyDuration('Đang chuyển hướng trang Đăng ký', sTe * 2);
                 setTimeout(() => {
                     if ($('.daaWTb .VfPpkd-LgbsSe').length > 0) {
                         //click Tạo tài khoản
