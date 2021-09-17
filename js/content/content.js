@@ -247,8 +247,8 @@ jQuery(document).ready(function ($) {
                                 //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
                                 /**************************/
                             } else {
-                                //Xử lý nhập thông tin đăng ký
-                                enterInformation(sNumGeted, sUrlGetCode, sEmailRecovery);
+                                //Xử lý nhập thông tin chi tiết
+                                enterInforDetail(sNumGeted, sUrlGetCode, sEmailRecovery);
                             }
                         }
                     },
@@ -263,8 +263,8 @@ jQuery(document).ready(function ($) {
         }, 20000);
     }
 
-    //Xử lý nhập thông tin đăng ký
-    function enterInformation(sNumGeted, sUrlGetCode, sEmailRecovery) {
+    //Xử lý nhập thông tin chi tiết
+    function enterInforDetail(sNumGeted, sUrlGetCode, sEmailRecovery) {
         sNumGeted = "+84" + sNumGeted;
         $('p.extension-show-info').remove();
         var sHtml = '<p class="extension-show-info">Lấy Thành công: ' + '<span class="color-yellow">' + sNumGeted + '<span>' + '</p>';
