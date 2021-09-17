@@ -10,6 +10,49 @@ var dLastName = ['Nguyễn', 'Cung', 'Trần', 'Pham', 'Phan', 'Cầu', 'Tạnh'
 
 var dDay = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27'];
 
+var dEmailRecovery = [
+    'kubikubo01@gmail.com',
+    'kubikubo02@gmail.com',
+    'kubikubo03@gmail.com',
+    'kubikubo05@gmail.com',
+    'kubikubo07@gmail.com',
+    'kubikubo09@gmail.com',
+    'kubikubo12@gmail.com',
+    'kubikubo96.4@gmail.com',
+    'kubikubo16@gmail.com',
+    'kubikubo17@gmail.com',
+    'kubikubo18@gmail.com',
+    'kubikubo19@gmail.com',
+    'kubikubo13@gmail.com',
+    'chuancau9118@gmail.com',
+    'lovansuongsung15893@gmail.com',
+    'kubikubo20@gmail.com',
+    'buithilan23498@gmail.com',
+    'donganvui2959232@gmail.com',
+    'suphasong28359243@gmail.com',
+    'buicungthi@gmail.com',
+    'kubikubo14@gmail.com',
+    'akuradio0001@gmail.com',
+    'akuradio0002@gmail.com',
+    'akuradio0003@gmail.com',
+    'akuradio0004@gmail.com',
+    'akuradio0005@gmail.com',
+    'akuradio0006@gmail.com',
+    'akuradio0007@gmail.com',
+    'akuradio0008@gmail.com',
+    'akuradio0009@gmail.com',
+    'akuradio0010@gmail.com',
+    'akuradio0011@gmail.com',
+    'akuradio0012@gmail.com',
+    'akuradio0013@gmail.com',
+    'akuradio0014@gmail.com',
+    'saophaixoan5238492387@gmail.com',
+    'akuradio0015@gmail.com',
+    'akuradio0017@gmail.com',
+    'akuradio0018@gmail.com',
+    'akuradio0019@gmail.com'
+];
+
 var dPhoneDieOrigin = [
     '877724541', '877721950', '877723678', '877726937', '877730140', '877730158', '949919610',
 ];
