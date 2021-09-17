@@ -5,7 +5,7 @@ jQuery(document).ready(function ($) {
     var sGo = 'www.google.com';
     var sAc = 'accounts.google.com';
     var sLg = 'https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Dvi%26next%3D%252F&amp%3Bhl=vi&amp%3Bpassive=false&amp%3Bservice=youtube&amp%3Builel=0&flowName=GlifWebSignIn&flowEntry=AddSession';
-    var sUp = 'https://accounts.google.com/signup/v2/webcreateaccount?continue=https%3A%2F%2Fwww.google.com%2F%3Fgws_rd%3Dssl&hl=en&dsh=S-2130637172%3A1631538050370332&biz=false&flowName=GlifWebSignIn&flowEntry=SignUp';
+    var sUp = 'https://accounts.google.com/signup/v2/webcreateaccount?continue=https%3A%2F%2Fwww.google.com%2F%3Fgws_rd%3Dssl&dsh=S-2130637172%3A1631538050370332&biz=false&flowName=GlifWebSignIn&flowEntry=SignUp';
     var sTe = 5000;
     var sTot = 0;
 
@@ -19,13 +19,6 @@ jQuery(document).ready(function ($) {
 
         if (config.start == "no") {
             showNotyNormal("CHÚC MỪNG đã tạo xong danh sách gmail.")
-            var newConfig = config;
-            newConfig.case_stack = 1;
-            newConfig.position = 0;
-            newConfig.total = 0;
-            chrome.storage.sync.set({
-                config: newConfig
-            })
         }
 
         if (config.account == '') {
