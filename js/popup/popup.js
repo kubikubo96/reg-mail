@@ -6,6 +6,7 @@ jQuery(document).ready(function ($) {
 
     chrome.storage.sync.get('config', function (result) {
         var config = result.config;
+        var dataNames = [];
 
         //Xư lý ramdom gmail
         $btnRandom.click(() => {
@@ -15,17 +16,17 @@ jQuery(document).ready(function ($) {
                 //...
             });
 
-            var firstNames = random_arr(dFirstName, 10); // tên
             var emails = '';
-
-            if (firstNames.length > 0) {
-                firstNames.forEach((firstName) => {
-                    var email = removeViTones(random_item(dLastName).replace(' ', '')).toLowerCase() + removeViTones(firstName.replace(' ', '')).toLowerCase() + randomChars(3).toLowerCase() + randomIntFromRange(111111, 99999) + '@gmail.com';
-                    var pass = randomChars();
-                    var emailRcovery = random_item(dEmailRecovery);
-                    var group_data = email + '|' + pass + '|' + emailRcovery;
-                    emails = emails + group_data + '\n';
-                })
+            for (let i = 0; i < 10; i++) {
+                var firstName = random_item(dFirstName);
+                var lastName = random_item(dLastName);
+                var email = removeViTones(firstName).toLowerCase().replaceAll(' ', '') + removeViTones(lastName).toLowerCase().replaceAll(' ', '') + randomChars(3).toLowerCase() + randomIntFromRange(111111, 99999) + '@gmail.com';
+                var pass = randomChars();
+                var emailRcovery = random_item(dEmailRecovery);
+                var group_mail = email + '|' + pass + '|' + emailRcovery;
+                emails = emails + group_mail + '\n';
+                var name = { 'first_name': firstName, 'last_name': lastName };
+                dataNames.push(name);
             }
             $inputExtensionAccount.val(emails.trim());
 
@@ -34,6 +35,7 @@ jQuery(document).ready(function ($) {
         $inputExtensionAccount.val(config.account);
         $btnSave.click(() => {
             config.account = $inputExtensionAccount.val();
+            config.data_name = dataNames;
 
             chrome.storage.sync.set({
                 config: config
@@ -109,11 +111,11 @@ jQuery(document).ready(function ($) {
         str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
         // Remove extra spaces
         // Bỏ các khoảng trắng liền nhau
-        str = str.replace(/ + /g, " ");
+        str = str.replace(/ + /g, "");
         str = str.trim();
         // Remove punctuations
         // Bỏ dấu câu, kí tự đặc biệt
-        str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
+        str = str.replace(/!|@|%|\^ð|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, "");
         return str;
     }
 });

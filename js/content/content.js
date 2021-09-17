@@ -118,8 +118,8 @@ jQuery(document).ready(function ($) {
                     var sEmail = $.trim(aAccount[0]).replace('@gmail.com', '');
                     var sPassWord = $.trim(aAccount[1]);
                     var sEmailRecovery = $.trim(aAccount[2]);
-                    var sFirstName = random_item(dFirstName);
-                    var sLastName = random_item(dLastName);
+                    var sFirstName = (config.data_name)[config.position].first_name;
+                    var sLastName = (config.data_name)[config.position].last_name;
 
                     //Show gmail create
                     $('p.extension-show-comment').remove();
@@ -133,7 +133,7 @@ jQuery(document).ready(function ($) {
 
                     /*********************/
                     //Nhập thông tin đăng ký gmail
-                    enterInfoRegister(sEmail, sPassWord, sEmailRecovery, sFirstName, sFirstName)
+                    enterInfoRegister(sEmail, sPassWord, sEmailRecovery, sFirstName, sLastName)
                     /*********************/
                 } else {
                     showNotyNormal('Không lấy được tài khoản gmail, đang chuyển về trang chủ Google', 'error');
@@ -146,7 +146,7 @@ jQuery(document).ready(function ($) {
     });
 
     //Nhập thông tin đăng ký gmail
-    function enterInfoRegister(sEmail, sPassWord, sEmailRecovery, sFirstName, sFirstName) {
+    function enterInfoRegister(sEmail, sPassWord, sEmailRecovery, sFirstName, sLastName) {
         setTimeout(() => {
             //Nhap Last Name: Họ
             $('p.extension-show-info').remove();
