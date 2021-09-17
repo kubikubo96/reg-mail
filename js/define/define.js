@@ -19,5 +19,7 @@ var initConfigDefine = {
     'account': window.dfAccounts,
     'position': 0,
     'total': 0,
+    'email_using': '',
+    'email_success': '',
     'phone_die': []
 };

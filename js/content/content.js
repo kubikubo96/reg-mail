@@ -37,6 +37,8 @@ jQuery(document).ready(function ($) {
                 elmDownEmailSuccess.download = 'LIST_EMAIL_SUCCESS.txt';
                 elmDownEmailSuccess.click();
                 elmDownEmailSuccess.remove();
+            } else {
+
             }
 
             return false;
@@ -53,16 +55,19 @@ jQuery(document).ready(function ($) {
             var sDomain = location.hostname;
             var sAccounts = config.account.split(/\r?\n/);
             var sAccount = '';
-            //Set tổng số gmail cần tạo
+            sAccount = sAccounts[config.position];
+            window.sAccount = sAccount;
+            console.log(sAccount);
+            console.log("***************");
+
+            //Xử lý set total và set email đang sử dụng
             if (config.total == 0) {
                 config.total = sAccounts.length;
+                config.email_using = sAccount;
                 chrome.storage.sync.set({
                     config: config
                 });
             }
-            sAccount = sAccounts[config.position];
-            console.log(sAccount);
-            console.log("***************");
 
             //Chuyển hướng về trang Google nếu đang ở sai trang
             if (sDomain != sAc && sDomain != sGo) {
@@ -83,8 +88,10 @@ jQuery(document).ready(function ($) {
                 reloadPage(sTe * 4);
             }
 
+            /*********************/
             //Handle Error
             handleError();
+            /*********************/
 
             //Xử lý nếu đang ở trang đăng nhập
             var sUrlFull = window.location.href;
@@ -124,78 +131,10 @@ jQuery(document).ready(function ($) {
                         '</p>';
                     $(sHtml).appendTo('body');
 
-                    setTimeout(() => {
-                        //Nhap Last Name: Họ
-                        $('p.extension-show-info').remove();
-                        var sHtml = '<p class="extension-show-info">Nhập họ</p>';
-                        $(sHtml).appendTo('body');
-                        $('form input[name=lastName]').bind('autotyped', function () {
-                        }).autotype(sLastName, { delay: randomIntFromRange(80, 200) });
-
-                        setTimeout(() => {
-                            //Nhap First Name: Tên
-                            $('p.extension-show-info').remove();
-                            var sHtml = '<p class="extension-show-info">Nhập tên</p>';
-                            $(sHtml).appendTo('body');
-                            $('form input[name=firstName]').bind('autotyped', function () {
-                            }).autotype(sFirstName, { delay: randomIntFromRange(80, 200) });
-
-                            setTimeout(() => {
-                                //Nhap User Name: Email
-                                $('p.extension-show-info').remove();
-                                var sHtml = '<p class="extension-show-info">Nhập Email</p>';
-                                $(sHtml).appendTo('body');
-                                $('form input[name=Username]').bind('autotyped', function () {
-                                }).autotype(sEmail, { delay: randomIntFromRange(80, 200) });
-
-                                setTimeout(() => {
-                                    //Nhap Mật khẩu
-                                    $('p.extension-show-info').remove();
-                                    var sHtml = '<p class="extension-show-info">Nhập mật khẩu</p>';
-                                    $(sHtml).appendTo('body');
-                                    $('form input[name=Passwd]').bind('autotyped', function () {
-                                    }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
-
-                                    setTimeout(() => {
-                                        //Nhap Lại Mật khẩu
-                                        $('p.extension-show-info').remove();
-                                        var sHtml = '<p class="extension-show-info">Nhập lại mật khẩu</p>';
-                                        $(sHtml).appendTo('body');
-                                        $('form input[name=ConfirmPasswd]').bind('autotyped', function () {
-                                        }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
-
-                                        setTimeout(() => {
-                                            //Checked xem mật khẩu
-                                            $('p.extension-show-info').remove();
-                                            var sHtml = '<p class="extension-show-info">Bật hiển thị mật khẩu</p>';
-                                            $(sHtml).appendTo('body');
-                                            if ($('input.VfPpkd-muHVFf-bMcfAe')) {
-                                                $('input.VfPpkd-muHVFf-bMcfAe').prop('checked', true);
-                                            }
-
-                                            setTimeout(() => {
-                                                if ($('button.nCP5yc')) {
-                                                    $('button.nCP5yc').click();
-
-                                                    $('p.extension-show-info').remove();
-                                                    var sHtml = '<p class="extension-show-info">Đang chuyển trang nhập số điện thoại</p>';
-                                                    $(sHtml).appendTo('body');
-                                                }
-                                                //Xử lý lấy số điện thoại
-                                                getPhoneAPI(sEmailRecovery);
-                                            }, sTe);
-
-                                        }, sTe);
-
-                                    }, 7000)
-
-                                }, 13000)
-
-                            }, 7000);
-
-                        }, 7000);
-
-                    }, 7000);
+                    /*********************/
+                    //Nhập thông tin đăng ký gmail
+                    enterInfoRegister(sEmail, sPassWord, sEmailRecovery, sFirstName, sFirstName)
+                    /*********************/
                 } else {
                     showNotyNormal('Không lấy được tài khoản gmail, đang chuyển về trang chủ Google', 'error');
                     setTimeout(() => {
@@ -206,6 +145,85 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    //Nhập thông tin đăng ký gmail
+    function enterInfoRegister(sEmail, sPassWord, sEmailRecovery, sFirstName, sFirstName) {
+        setTimeout(() => {
+            //Nhap Last Name: Họ
+            $('p.extension-show-info').remove();
+            var sHtml = '<p class="extension-show-info">Nhập họ</p>';
+            $(sHtml).appendTo('body');
+            $('form input[name=lastName]').bind('autotyped', function () {
+            }).autotype(sLastName, { delay: randomIntFromRange(80, 200) });
+
+            setTimeout(() => {
+                //Nhap First Name: Tên
+                $('p.extension-show-info').remove();
+                var sHtml = '<p class="extension-show-info">Nhập tên</p>';
+                $(sHtml).appendTo('body');
+                $('form input[name=firstName]').bind('autotyped', function () {
+                }).autotype(sFirstName, { delay: randomIntFromRange(80, 200) });
+
+                setTimeout(() => {
+                    //Nhap User Name: Email
+                    $('p.extension-show-info').remove();
+                    var sHtml = '<p class="extension-show-info">Nhập Email</p>';
+                    $(sHtml).appendTo('body');
+                    $('form input[name=Username]').bind('autotyped', function () {
+                    }).autotype(sEmail, { delay: randomIntFromRange(80, 200) });
+
+                    setTimeout(() => {
+                        //Nhap Mật khẩu
+                        $('p.extension-show-info').remove();
+                        var sHtml = '<p class="extension-show-info">Nhập mật khẩu</p>';
+                        $(sHtml).appendTo('body');
+                        $('form input[name=Passwd]').bind('autotyped', function () {
+                        }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
+
+                        setTimeout(() => {
+                            //Nhap Lại Mật khẩu
+                            $('p.extension-show-info').remove();
+                            var sHtml = '<p class="extension-show-info">Nhập lại mật khẩu</p>';
+                            $(sHtml).appendTo('body');
+                            $('form input[name=ConfirmPasswd]').bind('autotyped', function () {
+                            }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
+
+                            setTimeout(() => {
+                                //Checked xem mật khẩu
+                                $('p.extension-show-info').remove();
+                                var sHtml = '<p class="extension-show-info">Bật hiển thị mật khẩu</p>';
+                                $(sHtml).appendTo('body');
+                                if ($('input.VfPpkd-muHVFf-bMcfAe')) {
+                                    $('input.VfPpkd-muHVFf-bMcfAe').prop('checked', true);
+                                }
+
+                                setTimeout(() => {
+                                    if ($('button.nCP5yc')) {
+                                        $('button.nCP5yc').click();
+
+                                        $('p.extension-show-info').remove();
+                                        var sHtml = '<p class="extension-show-info">Đang chuyển trang nhập số điện thoại</p>';
+                                        $(sHtml).appendTo('body');
+                                    }
+
+                                    /*********************/
+                                    //Xử lý lấy số điện thoại
+                                    getPhoneAPI(sEmailRecovery);
+                                    /*********************/
+
+                                }, sTe);
+
+                            }, sTe);
+
+                        }, 7000)
+
+                    }, 13000)
+
+                }, 7000);
+
+            }, 7000);
+
+        }, 7000);
+    }
 
     //Xử lý get Phone
     function getPhoneAPI(sEmailRecovery) {
@@ -247,8 +265,12 @@ jQuery(document).ready(function ($) {
                                 //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
                                 /**************************/
                             } else {
-                                //Xử lý nhập thông tin chi tiết
-                                enterInforDetail(sNumGeted, sUrlGetCode, sEmailRecovery);
+
+                                /*****************************/
+                                //Xử lý nhập số điện thoại
+                                enterPhone(sNumGeted, sUrlGetCode, sEmailRecovery);
+                                /*****************************/
+
                             }
                         }
                     },
@@ -263,8 +285,8 @@ jQuery(document).ready(function ($) {
         }, 20000);
     }
 
-    //Xử lý nhập thông tin chi tiết
-    function enterInforDetail(sNumGeted, sUrlGetCode, sEmailRecovery) {
+    //Xử lý nhập số điện thoại
+    function enterPhone(sNumGeted, sUrlGetCode, sEmailRecovery) {
         sNumGeted = "+84" + sNumGeted;
         $('p.extension-show-info').remove();
         var sHtml = '<p class="extension-show-info">Lấy Thành công: ' + '<span class="color-yellow">' + sNumGeted + '<span>' + '</p>';
@@ -305,8 +327,10 @@ jQuery(document).ready(function ($) {
                                     //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
                                     /**************************/
                                 } else {
+                                    /*********************/
                                     //Get Code
                                     getCodeAPI(sUrlGetCode, sEmailRecovery);
+                                    /*********************/
                                 }
                             }, 5000);
                         }
@@ -359,8 +383,10 @@ jQuery(document).ready(function ($) {
                                         if ($('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ')) {
                                             $('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ').click()
 
+                                            /*********************/
                                             //Trang chi tiết
-                                            personalDetails(sEmailRecovery);
+                                            enterInfoDetails(sEmailRecovery);
+                                            /*********************/
                                         }
                                     }, 7000);
                                 }
@@ -382,7 +408,7 @@ jQuery(document).ready(function ($) {
     }
 
     //Trang điền thông tin bổ sung
-    function personalDetails(sEmailRecovery) {
+    function enterInfoDetails(sEmailRecovery) {
         setTimeout(() => {
             var sDay = random_item(dDay);
             var sMonth = randomIntFromRange(1, 12);
@@ -449,8 +475,11 @@ jQuery(document).ready(function ($) {
                                                 //Click tiep theo => Chuyển đến điều khoản Google
                                                 if ($('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc')) {
                                                     $('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc').click();
+
+                                                    /*********************/
                                                     //Trang đồng ý điều khoản google
                                                     googleTerms();
+                                                    /*********************/
                                                 }
                                             }, 10000);
 
@@ -484,6 +513,7 @@ jQuery(document).ready(function ($) {
             //Tăng position khi tạo gmail vị trí hiện tại thành công
             chrome.storage.sync.get('config', function (result) {
                 config = result.config;
+                config.email_success = config.email_success + ' *** ' + config.email_using;
                 config.position = config.position + 1;
                 if (config.position >= config.total) {
                     config.start = 'no';
