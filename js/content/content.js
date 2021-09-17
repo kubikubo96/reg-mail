@@ -247,55 +247,8 @@ jQuery(document).ready(function ($) {
                                 //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
                                 /**************************/
                             } else {
-                                sNumGeted = "+84" + sNumGeted;
-                                $('p.extension-show-info').remove();
-                                var sHtml = '<p class="extension-show-info">Lấy Thành công: ' + '<span class="color-yellow">' + sNumGeted + '<span>' + '</p>';
-                                $(sHtml).appendTo('body');
-
-                                //Bấm chọn Mã vùng
-                                setTimeout(() => {
-                                    if ($('.WEQkZc .VfPpkd-TkwUic')) {
-                                        $('.WEQkZc .VfPpkd-TkwUic').click()
-                                    }
-                                }, 1000 * 2);
-
-                                //Chọn Việt Nam
-                                setTimeout(() => {
-                                    if ($('li.VfPpkd-StrnGf-rymPhb-ibnC6b[data-value=vn]')) {
-                                        $('li.VfPpkd-StrnGf-rymPhb-ibnC6b[data-value=vn]').click();
-                                    }
-                                }, 1000 * 4);
-
-                                setTimeout(() => {
-                                    //Nhập số điện thoại
-                                    if ($('#phoneNumberId')) {
-                                        $('#phoneNumberId').val('');
-                                        setTimeout(() => {
-                                            $('#phoneNumberId').bind('autotyped', function () {
-                                            }).autotype(sNumGeted, { delay: randomIntFromRange(80, 200) });
-
-                                            setTimeout(() => {
-                                                //Click tiep theo sau khi nhap so dien thoai
-                                                $('p.extension-show-info').remove();
-                                                if ($('.dG5hZc .qhFLie button')) {
-                                                    $('.dG5hZc .qhFLie button').click()
-
-                                                    setTimeout(() => {
-                                                        var currentUrl = window.location.href;
-                                                        if (currentUrl.includes('webgradsidvphone')) {
-                                                            /**************************/
-                                                            //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
-                                                            /**************************/
-                                                        } else {
-                                                            //Get Code
-                                                            getCodeAPI(sUrlGetCode, sEmailRecovery);
-                                                        }
-                                                    }, 5000);
-                                                }
-                                            }, sTe);
-                                        }, 2000);
-                                    }
-                                }, 1000 * 6);
+                                //Xử lý nhập thông tin đăng ký
+                                enterInformation(sNumGeted, sUrlGetCode, sEmailRecovery);
                             }
                         }
                     },
@@ -308,6 +261,59 @@ jQuery(document).ready(function ($) {
                 });
             }
         }, 20000);
+    }
+
+    //Xử lý nhập thông tin đăng ký
+    function enterInformation(sNumGeted, sUrlGetCode, sEmailRecovery) {
+        sNumGeted = "+84" + sNumGeted;
+        $('p.extension-show-info').remove();
+        var sHtml = '<p class="extension-show-info">Lấy Thành công: ' + '<span class="color-yellow">' + sNumGeted + '<span>' + '</p>';
+        $(sHtml).appendTo('body');
+
+        //Bấm chọn Mã vùng
+        setTimeout(() => {
+            if ($('.WEQkZc .VfPpkd-TkwUic')) {
+                $('.WEQkZc .VfPpkd-TkwUic').click()
+            }
+        }, 1000 * 2);
+
+        //Chọn Việt Nam
+        setTimeout(() => {
+            if ($('li.VfPpkd-StrnGf-rymPhb-ibnC6b[data-value=vn]')) {
+                $('li.VfPpkd-StrnGf-rymPhb-ibnC6b[data-value=vn]').click();
+            }
+        }, 1000 * 4);
+
+        setTimeout(() => {
+            //Nhập số điện thoại
+            if ($('#phoneNumberId')) {
+                $('#phoneNumberId').val('');
+                setTimeout(() => {
+                    $('#phoneNumberId').bind('autotyped', function () {
+                    }).autotype(sNumGeted, { delay: randomIntFromRange(80, 200) });
+
+                    setTimeout(() => {
+                        //Click tiep theo sau khi nhap so dien thoai
+                        $('p.extension-show-info').remove();
+                        if ($('.dG5hZc .qhFLie button')) {
+                            $('.dG5hZc .qhFLie button').click()
+
+                            setTimeout(() => {
+                                var currentUrl = window.location.href;
+                                if (currentUrl.includes('webgradsidvphone')) {
+                                    /**************************/
+                                    //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
+                                    /**************************/
+                                } else {
+                                    //Get Code
+                                    getCodeAPI(sUrlGetCode, sEmailRecovery);
+                                }
+                            }, 5000);
+                        }
+                    }, sTe);
+                }, 2000);
+            }
+        }, 1000 * 6);
     }
 
     //Xử lý Get Code
