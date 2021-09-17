@@ -1,7 +1,7 @@
 {
     "name": "Reg Gmail",
     "description": "Reg Gmail",
-    "version": "1",
+    "version": "1.0.1",
     "manifest_version": 2,
     "icons": {
         "16": "images/gmail_logo.png",
