@@ -4,7 +4,7 @@ jQuery(document).ready(function ($) {
     var sYB = 'www.youtube.com';
     var sGo = 'www.google.com';
     var sAc = 'accounts.google.com';
-    var sLg = 'https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Dvi%26next%3D%252F&amp%3Bhl=vi&amp%3Bpassive=false&amp%3Bservice=youtube&amp%3Builel=0&flowName=GlifWebSignIn&flowEntry=AddSession';
+    var sLg = 'https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26next%3D%252F&amp%3Bpassive=false&amp%3Bservice=youtube&amp%3Builel=0&flowName=GlifWebSignIn&flowEntry=AddSession';
     var sUp = 'https://accounts.google.com/signup/v2/webcreateaccount?continue=https%3A%2F%2Fwww.google.com%2F%3Fgws_rd%3Dssl&dsh=S-2130637172%3A1631538050370332&biz=false&flowName=GlifWebSignIn&flowEntry=SignUp';
     var sTe = randomIntFromRange(4000, 6000);
     var sTot = 0;
@@ -19,6 +19,17 @@ jQuery(document).ready(function ($) {
 
         if (config.start == "no") {
             showNotyNormal("CHÚC MỪNG đã tạo xong danh sách gmail.")
+
+            //Lưu Phone die về máy
+            var elmDownPhoneDie = document.createElement('a');
+            var fileName = 'LIST_PHONE_DIE.txt';
+            var saveData = JSON.stringify(config.phone_die);
+            elmDownPhoneDie.href = "data:application/octet-stream," + encodeURIComponent(saveData);
+            elmDownPhoneDie.download = fileName;
+            elmDownPhoneDie.click();
+            elmDownPhoneDie.remove();
+
+            return false;
         }
 
         if (config.account == '') {
@@ -45,9 +56,9 @@ jQuery(document).ready(function ($) {
 
             //Chuyển hướng về trang Google nếu đang ở sai trang
             if (sDomain != sAc && sDomain != sGo) {
-                showNotyDuration('Đang Chuyển hướng về trang Đăng ký', sTe);
+                showNotyDuration('Đang Chuyển hướng về trang Google', sTe);
                 setTimeout(() => {
-                    window.location.href = sUp;
+                    window.location.href = 'https://' + sGo;
                 }, sTe);
             }
 
@@ -55,14 +66,8 @@ jQuery(document).ready(function ($) {
             if (sDomain == sGo) {
                 showNotyDuration('Đang Chuyển hướng trang Đăng ký', sTe * 2);
                 setTimeout(() => {
-                    // var btnLogin = $('body .gb_Se a.gb_3');
-                    // if (btnLogin?.length > 0) {
-                    //     btnLogin[0].click();
-                    // } else {
-                    //     window.location.href = sUp;
-                    // }
                     window.location.href = sUp;
-                }, sTe * 2);
+                }, sTe);
 
                 //Reload trang nếu có lỗi
                 reloadPage(sTe * 4);
@@ -78,21 +83,7 @@ jQuery(document).ready(function ($) {
                 console.log("Đang ở trang đăng nhập");
                 showNotyDuration('Đang chuyển hướng trang Đăng ký', sTe * 2);
                 setTimeout(() => {
-                    if ($('.daaWTb .VfPpkd-LgbsSe').length > 0) {
-                        //click Tạo tài khoản
-                        // $('.daaWTb .VfPpkd-LgbsSe')[0].click();
-                        // setTimeout(() => {
-                        //     if ($('.VfPpkd-xl07Ob-XxIAqe ul li').length > 0) {
-                        //         //click cho bản thân tôi
-                        //         $('.VfPpkd-xl07Ob-XxIAqe ul li')[0].click();
-                        //     } else {
-                        //         window.location.href = sUp;
-                        //     }
-                        // }, sTe);
-                        window.location.href = sUp;
-                    } else {
-                        window.location.href = sUp;
-                    }
+                    window.location.href = sUp;
                 }, sTe);
 
                 //Reload trang nếu có lỗi
@@ -196,7 +187,7 @@ jQuery(document).ready(function ($) {
 
                     }, 7000);
                 } else {
-                    showNotyNormal('Không lấy được tài khoản google, đang chuyển về trang chủ Google', 'error');
+                    showNotyNormal('Không lấy được tài khoản gmail, đang chuyển về trang chủ Google', 'error');
                     setTimeout(() => {
                         window.location.href = 'https://' + sGo;
                     }, sTe * 2);
@@ -239,15 +230,6 @@ jQuery(document).ready(function ($) {
                                 chrome.storage.sync.set({
                                     config: config
                                 });
-
-                                //Lưu Phone die về máy
-                                var elmDownPhoneDie = document.createElement('a');
-                                var fileName = 'list_phone_die.txt';
-                                var saveData = JSON.stringify(sPhoneDie);
-                                elmDownPhoneDie.href = "data:application/octet-stream," + encodeURIComponent(saveData);
-                                elmDownPhoneDie.download = fileName;
-                                elmDownPhoneDie.click();
-                                elmDownPhoneDie.remove();
                             })
 
                             if (sPhoneDie.includes(sNumGeted)) {

@@ -1,5 +1,5 @@
 var apiKey = "72c1e93b";
-var netWork = "Mobi,Vina,ITelecom"; //Viettel,Mobi,Vina,VNMB,ITelecom
+var netWork = "Viettel,Mobi,Vina,ITelecom"; //Viettel,Mobi,Vina,VNMB,ITelecom
 
 var dUrlGetNumber = "https://chothuesimcode.com/api?act=number&apik=" + apiKey + "&appId=1005&carrier=" + netWork;
 var dUrlGetCode = "https://chothuesimcode.com/api?act=code&apik=" + apiKey + "&id=";
