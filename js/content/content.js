@@ -20,14 +20,24 @@ jQuery(document).ready(function ($) {
         if (config.start == "no") {
             showNotyNormal("CHÚC MỪNG đã tạo xong danh sách gmail.")
 
+
             //Lưu Phone die về máy
             var elmDownPhoneDie = document.createElement('a');
-            var fileName = 'LIST_PHONE_DIE.txt';
             var saveData = JSON.stringify(config.phone_die);
             elmDownPhoneDie.href = "data:application/octet-stream," + encodeURIComponent(saveData);
-            elmDownPhoneDie.download = fileName;
+            elmDownPhoneDie.download = 'LIST_PHONE_DIE.txt';
             elmDownPhoneDie.click();
             elmDownPhoneDie.remove();
+
+            if (config.position >= config.total) {
+                //Lưu Email Success về máy
+                var elmDownEmailSuccess = document.createElement('a');
+                var saveData = JSON.stringify(config.account);
+                elmDownEmailSuccess.href = "data:application/octet-stream," + encodeURIComponent(saveData);
+                elmDownEmailSuccess.download = 'LIST_EMAIL_SUCCESS.txt';
+                elmDownEmailSuccess.click();
+                elmDownEmailSuccess.remove();
+            }
 
             return false;
         }
