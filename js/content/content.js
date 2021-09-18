@@ -175,14 +175,14 @@ jQuery(document).ready(function ($) {
                             $('form input[name=ConfirmPasswd]').bind('autotyped', function () {
                             }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
 
-                            showNotyBottom('Chờ nật hiện thị mật khẩu');
+                            showNotyBottom('Chờ bật hiện thị mật khẩu');
                             setTimeout(() => {
                                 //Checked xem mật khẩu
                                 if ($('input.VfPpkd-muHVFf-bMcfAe')) {
                                     $('input.VfPpkd-muHVFf-bMcfAe').prop('checked', true);
                                 }
 
-                                showNotyBottom('Chờ chuyển trang');
+                                showNotyBottom('Chờ chuyển trang NHẬP SỐ ĐIỆN THOẠI');
                                 setTimeout(() => {
                                     if ($('button.nCP5yc')) {
                                         $('button.nCP5yc').click();
@@ -193,7 +193,7 @@ jQuery(document).ready(function ($) {
                                     getPhoneAPI(sEmailRecovery);
                                     /*********************/
 
-                                }, 10000);
+                                }, 7000);
 
                             }, 7000);
 
@@ -210,71 +210,87 @@ jQuery(document).ready(function ($) {
 
     //Xử lý get Phone
     function getPhoneAPI(sEmailRecovery) {
+        showNotyBottom('Chờ lấy số từ API');
         window.sNumCallPhone = 0;
         window.sPhoneCanUse = false;
-        window.loadingGetPhone = false;
-        showNotyBottom('Chờ lấy số');
-        setInterval(() => {
-            if (window.sPhoneCanUse == false) {
-                if (window.sNumCallPhone >= 20) {
-                    showNotyTop("Lỗi sai số quá nhiều. đang chuyển hướng về trang Google", '', 'error');
+        window.enteringPhone = false;
+        //Từ lần 2 trở đi
+        var getPhoneInterval = setInterval(() => {
+            handlePhone(sEmailRecovery, getPhoneInterval);
+        }, 1000 * 35);
+
+        //Chạy lần đầu tiền
+        setTimeout(() => {
+            handlePhone(sEmailRecovery, getPhoneInterval);
+        }, sTe);
+
+    }
+
+    function handlePhone(sEmailRecovery, getPhoneInterval) {
+        console.log("window.sNumCallPhone:" + window.sNumCallPhone);
+        console.log("window.sPhoneCanUse:" + window.sPhoneCanUse);
+        console.log("window.enteringPhone:" + window.enteringPhone);
+        if (window.sNumCallPhone >= 20) {
+            showNotyTop("Lỗi sai số quá nhiều. đang chuyển hướng về trang Google", '', 'error');
+            setTimeout(() => {
+                window.location.href = 'https://' + sGo;
+            }, sTe);
+        } else if (window.sPhoneCanUse == false && window.enteringPhone == false) {
+            $.ajax({
+                type: 'GET',
+                url: dUrlGetNumber,
+                success: function (data) {
+                    window.sNumCallPhone = window.sNumCallPhone + 1;
+                    if (data.ResponseCode == 0 || data.Msg == "OK") {
+                        window.enteringPhone = true;
+                        var sIdGeted = data.Result.Id;
+                        var sUrlGetCode = dUrlGetCode + sIdGeted;
+                        var sNumGeted = data.Result.Number;
+                        var sPhoneDie = dPhoneDieOrigin.concat(config.phone_die);
+
+
+                        //Lưu số đã lấy vòa danh sách die
+                        chrome.storage.sync.get('config', function (result) {
+                            config = result.config;
+                            var phone_die = config.phone_die;
+                            phone_die.push(sNumGeted.replace('+84', ''));
+                            config.phone_die = phone_die;
+                            chrome.storage.sync.set({
+                                config: config
+                            });
+                        })
+                        console.log('Phone die:');
+                        console.log(config.phone_die);
+                        console.log('**************');
+
+                        //Kiểm tra số lấy được có nằm trong danh sách số die không
+                        if (sPhoneDie.includes(sNumGeted.replace('+84', ''))) {
+                            showNotyBottom('Số đã nằm trong danh sách die, Chờ lấy số khác.');
+                            /**************************/
+                            //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
+                            /**************************/
+                        } else {
+                            /*****************************/
+                            //Xử lý nhập số điện thoại
+                            enterPhone(getPhoneInterval, sNumGeted, sUrlGetCode, sEmailRecovery);
+                            /*****************************/
+
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showNotyTop("Lỗi lấy số data từ API, đang chuyển trang Google", '', 'error');
                     setTimeout(() => {
                         window.location.href = 'https://' + sGo;
-                    }, sTe);
-                } else {
-                    $.ajax({
-                        type: 'GET',
-                        url: dUrlGetNumber,
-                        success: function (data) {
-                            window.sNumCallPhone = window.sNumCallPhone + 1;
-                            if (data.ResponseCode == 0 || data.Msg == "OK") {
-                                var sIdGeted = data.Result.Id;
-                                var sUrlGetCode = dUrlGetCode + sIdGeted;
-                                var sNumGeted = data.Result.Number;
-                                var sPhoneDie = dPhoneDieOrigin.concat(config.phone_die);
-
-                                //Lưu số đã lấy vòa danh sách die
-                                chrome.storage.sync.get('config', function (result) {
-                                    config = result.config;
-                                    var phone_die = config.phone_die;
-                                    phone_die.push(sNumGeted.replace('+84', ''));
-                                    config.phone_die = phone_die;
-                                    chrome.storage.sync.set({
-                                        config: config
-                                    });
-                                })
-                                console.log('Phone die:');
-                                console.log(config.phone_die);
-                                console.log('**************');
-
-                                if (sPhoneDie.includes(sNumGeted)) {
-                                    /**************************/
-                                    //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
-                                    /**************************/
-                                } else {
-                                    /*****************************/
-                                    //Xử lý nhập số điện thoại
-                                    enterPhone(sNumGeted, sUrlGetCode, sEmailRecovery);
-                                    /*****************************/
-
-                                }
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            showNotyTop("Lỗi lấy số data từ API, đang chuyển trang Google", '', 'error');
-                            setTimeout(() => {
-                                window.location.href = 'https://' + sGo;
-                            }, 1000 * 120);
-                            return false;
-                        }
-                    });
+                    }, 1000 * 120);
+                    return false;
                 }
-            }
-        }, 1000 * 20);
+            });
+        }
     }
 
     //Xử lý nhập số điện thoại
-    function enterPhone(sNumGeted, sUrlGetCode, sEmailRecovery) {
+    function enterPhone(getPhoneInterval, sNumGeted, sUrlGetCode, sEmailRecovery) {
         sNumGeted = "+84" + sNumGeted;
         showNotyBottom('Lấy Thành công: ' + '<span class="color-yellow">' + sNumGeted + '<span>');
         //Bấm chọn Mã vùng
@@ -289,7 +305,7 @@ jQuery(document).ready(function ($) {
             if ($('li.VfPpkd-StrnGf-rymPhb-ibnC6b[data-value=vn]')) {
                 $('li.VfPpkd-StrnGf-rymPhb-ibnC6b[data-value=vn]').click();
             }
-        }, 1000 * 5);
+        }, 1000 * 4);
 
         setTimeout(() => {
             //Nhập số điện thoại
@@ -300,12 +316,13 @@ jQuery(document).ready(function ($) {
                     $('#phoneNumberId').bind('autotyped', function () {
                     }).autotype(sNumGeted, { delay: randomIntFromRange(80, 200) });
 
-                    showNotyBottom('Ấn Button tiếp theo');
+                    showNotyBottom('Chờ ấn Button tiếp theo');
                     setTimeout(() => {
                         //Click tiep theo sau khi nhap so dien thoai
                         if ($('.dG5hZc .qhFLie button')) {
                             $('.dG5hZc .qhFLie button').click()
-
+                            window.enteringPhone = false;
+                            $('p.extension-show-info').remove();
                             setTimeout(() => {
                                 var currentUrl = window.location.href;
                                 if (currentUrl.includes('webgradsidvphone')) {
@@ -315,41 +332,46 @@ jQuery(document).ready(function ($) {
                                     /**************************/
                                 } else {
                                     /*********************/
+                                    window.sPhoneCanUse = true;
+                                    clearInterval(getPhoneInterval);
                                     //Get Code
                                     getCodeAPI(sUrlGetCode, sEmailRecovery);
                                     /*********************/
                                 }
-                            }, 8000);
+                            }, sTe);
                         }
                     }, 8000);
                 }, 2000);
             }
-        }, 1000 * 9);
+        }, 1000 * 7);
     }
 
     //Xử lý Get Code
     function getCodeAPI(sUrlGetCode, sEmailRecovery) {
         window.sNumGetCode = 0;
         window.sGetCodeSuccess = false;
-        window.loadingGetCode = false;
-        window.sPhoneCanUse = true;
+        window.sLoadingGetCode = false;
+        console.log("window.sNumGetCode:" + window.sNumGetCode);
+        console.log("window.sGetCodeSuccess:" + window.sGetCodeSuccess);
+        console.log("window.sLoadingGetCode:" + window.sLoadingGetCode);
         showNotyBottom("Vui lòng chờ lấy code");
-        setInterval(() => {
+        var getCodeInterval = setInterval(() => {
             if (window.sGetCodeSuccess == false) {
-                if (window.sNumGetCode >= 10) {
+                if (window.sNumGetCode >= 5) {
                     showNotyTop("Lấy code thất bại. đang chuyển hướng Google: ", '', 'error');
                     setTimeout(() => {
                         window.location.href = 'https://' + sGo;
                     }, sTe);
-                } else if (window.loadingGetCode == false) {
-                    window.loadingGetCode = true;
+                } else if (window.sLoadingGetCode == false) {
+                    window.sLoadingGetCode = true;
                     window.sNumGetCode = window.sNumGetCode + 1;
                     $.ajax({
                         type: 'GET',
                         url: sUrlGetCode,
                         success: function (data) {
-                            window.loadingGetCode = false;
+                            window.sLoadingGetCode = false;
                             if (data.Result.Code) {
+                                clearInterval(getCodeInterval);
                                 window.sNumGetCode = -100;
                                 window.sGetCodeSuccess = true;
                             }
@@ -364,7 +386,7 @@ jQuery(document).ready(function ($) {
                                     }, 1000);
 
                                     setTimeout(() => {
-                                        showNotyBottom("Chuyển đến trang thông tin chi tiết");
+                                        showNotyBottom("Chờ chuyển trang ĐIỀN THÊM THÔNG TIN");
                                         if ($('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ')) {
                                             $('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ').click()
 
@@ -380,8 +402,8 @@ jQuery(document).ready(function ($) {
                             }
                         },
                         error: function (xhr, status, error) {
-                            window.loadingGetCode = false;
-                            showNotyTop("Lỗi lấy Code data từ API, đang chuyển hướng trang Google", '', "error");
+                            window.sLoadingGetCode = false;
+                            showNotyTop("Lỗi lấy CODE từ api, đang chuyển hướng trang Google", '', "error");
                             setTimeout(() => {
                                 window.location.href = 'https://' + sGo;
                             }, 1000 * 120);
@@ -390,7 +412,7 @@ jQuery(document).ready(function ($) {
                     })
                 }
             }
-        }, sTe * 2);
+        }, sTe * 4);
     }
 
     //Trang điền thông tin bổ sung
@@ -441,7 +463,7 @@ jQuery(document).ready(function ($) {
                                         showNotyBottom('Nhập giới tính: ' + tMale);
                                         setTimeout(() => {
                                             //Nhap gioi tinh
-                                            $('#gender').val(tMale).change();
+                                            $('#gender').val(sMale).change();
 
                                             showNotyBottom("Chuyển đến điều khoản Google");
                                             setTimeout(() => {
@@ -524,8 +546,6 @@ jQuery(document).ready(function ($) {
     }
 
     function showNotyBottom(content, type = "success") {
-        $('p.extension-show-info').remove();
-        $('p.extension-show-info').remove();
         $('p.extension-show-info').remove();
         if (window.inTime)
             clearInterval(window.inTime);
@@ -622,9 +642,9 @@ jQuery(document).ready(function ($) {
                 }, 2000);
             }
 
-            //Nếu ở 1 trang quá 10p thì chuyển về trang google 
+            //Nếu ở 1 trang quá 5p thì chuyển về trang google 
             sTot = sTot + sTe * 2;
-            if (sTot > (1000 * 60 * 10)) {
+            if (sTot > (1000 * 60 * 5)) {
                 window.location.href = 'https://' + sGo;
             }
         }, sTe * 2);
