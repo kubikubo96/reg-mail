@@ -300,9 +300,9 @@ jQuery(document).ready(function ($) {
                     $('#phoneNumberId').bind('autotyped', function () {
                     }).autotype(sNumGeted, { delay: randomIntFromRange(80, 200) });
 
+                    showNotyBottom('Ấn Button tiếp theo');
                     setTimeout(() => {
                         //Click tiep theo sau khi nhap so dien thoai
-                        showNotyBottom('Ấn Button tiếp theo');
                         $('p.extension-show-info').remove();
                         if ($('.dG5hZc .qhFLie button')) {
                             $('.dG5hZc .qhFLie button').click()
