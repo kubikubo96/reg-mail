@@ -100,12 +100,45 @@ div.options-content .options_row {
 }
 
 .btn-save{
-    margin-right: 10px;
 }
 
 .btn-random {
-    margin-right: 12px;
     background: blueviolet;
+}
+
+.btn-get-gmail {
+    background-color: lightcoral;
+    height: 20px;
+    font-size: 10px;
+    line-height: 0;
+}
+
+.btn-get-pass {
+    background-color: #333333;
+    height: 20px;
+    font-size: 10px;
+    line-height: 0;
+}
+
+.btn-get-gmail-recovery {
+    background-color: cornflowerblue;
+    height: 20px;
+    font-size: 10px;
+    line-height: 0;
+}
+
+.btn-get-gmail-group {
+    background-color: darkolivegreen;
+    height: 20px;
+    font-size: 10px;
+    line-height: 0;
+}
+
+.btn-get-phone-die {
+    background-color: indianred;
+    height: 20px;
+    font-size: 10px;
+    line-height: 0;
 }
 
 .options_row .option_label {
@@ -143,6 +176,10 @@ textarea{
     min-width: 100%;
     padding-top: 20px;
     padding-bottom: 20px;
+}
+
+textarea.another_info {
+    display: none;
 }
 
 .extension_account{

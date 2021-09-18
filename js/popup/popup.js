@@ -2,7 +2,13 @@ jQuery(document).ready(function ($) {
     var $btnRandom = $('button[name="btn-random"]');
     var $btnSave = $('button[name="btn-save"]');
     var $btnRetore = $('button[name="btn-restore-default"]');
+    var $btnGetGmailGroup = $('button[name="btn-get-gmail-group"]');
+    var $btnGetGmail = $('button[name="btn-get-gmail"]');
+    var $btnGetPass = $('button[name="btn-get-pass"]');
+    var $btnGetGmailRecovery = $('button[name="btn-get-gmail-recovery"]');
+    var $btnGetPhoneDie = $('button[name="btn-get-phone-die"]');
     var $inputExtensionAccount = $('.extension_account');
+    var $inputAnotherInfo = $('.another_info');
 
     chrome.storage.sync.get('config', function (result) {
         var config = result.config;
@@ -16,20 +22,44 @@ jQuery(document).ready(function ($) {
                 //...
             });
 
-            var emails = '';
+            var gmails = '';
             for (let i = 0; i < 10; i++) {
                 var firstName = random_item(dFirstName);
                 var lastName = random_item(dLastName);
-                var email = removeViTones(firstName).toLowerCase().replaceAll(' ', '') + removeViTones(lastName).toLowerCase().replaceAll(' ', '') + randomChars(3).toLowerCase() + randomIntFromRange(11111111, 99999999) + '@gmail.com';
+                var gmail = removeViTones(firstName).toLowerCase().replaceAll(' ', '') + removeViTones(lastName).toLowerCase().replaceAll(' ', '') + randomChars(3).toLowerCase() + randomIntFromRange(11111111, 99999999) + '@gmail.com';
                 var pass = randomChars();
-                var emailRcovery = random_item(dEmailRecovery);
-                var group_mail = email + '|' + pass + '|' + emailRcovery;
-                emails = emails + group_mail + '\n';
+                var gmailRcovery = random_item(dEmailRecovery);
+                var group_gmail = gmail + '|' + pass + '|' + gmailRcovery;
+                gmails = gmails + group_gmail + '\n';
                 var name = { 'first_name': firstName, 'last_name': lastName };
                 dataNames.push(name);
             }
-            $inputExtensionAccount.val(emails.trim());
+            $inputExtensionAccount.val(gmails.trim());
+        });
 
+        $btnGetGmailGroup.click(() => {
+            openInfo();
+            $inputAnotherInfo.val(config.gmail_success);
+        });
+
+        $btnGetGmail.click(() => {
+            openInfo();
+            $inputAnotherInfo.val(config.gmail_get);
+        });
+
+        $btnGetPass.click(() => {
+            openInfo();
+            $inputAnotherInfo.val(config.pass_get);
+        })
+
+        $btnGetGmailRecovery.click(() => {
+            openInfo();
+            $inputAnotherInfo.val(config.gmail_recovery_get);
+        })
+
+        $btnGetPhoneDie.click(() => {
+            openInfo();
+            $inputAnotherInfo.val(JSON.stringify(config.phone_die));
         });
 
         $inputExtensionAccount.val(config.account);
@@ -53,6 +83,11 @@ jQuery(document).ready(function ($) {
 
             $inputExtensionAccount.val('');
         });
+
+        function openInfo() {
+            if ($inputAnotherInfo.css('display') == 'none')
+                $inputAnotherInfo.css('display', 'block');
+        }
     });
 
 

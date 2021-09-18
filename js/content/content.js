@@ -19,28 +19,6 @@ jQuery(document).ready(function ($) {
 
         if (config.start == "no") {
             showNotyTop("CHÚC MỪNG đã tạo xong danh sách gmail.")
-
-
-            //Lưu Phone die về máy
-            var elmDownPhoneDie = document.createElement('a');
-            var saveData = JSON.stringify(config.phone_die);
-            elmDownPhoneDie.href = "data:application/octet-stream," + encodeURIComponent(saveData);
-            elmDownPhoneDie.download = 'LIST_PHONE_DIE.txt';
-            elmDownPhoneDie.click();
-            elmDownPhoneDie.remove();
-
-            if (config.position >= config.total) {
-                //Lưu Email Success về máy
-                var elmDownEmailSuccess = document.createElement('a');
-                var saveData = JSON.stringify(config.account);
-                elmDownEmailSuccess.href = "data:application/octet-stream," + encodeURIComponent(saveData);
-                elmDownEmailSuccess.download = 'LIST_EMAIL_SUCCESS.txt';
-                elmDownEmailSuccess.click();
-                elmDownEmailSuccess.remove();
-            } else {
-
-            }
-
             return false;
         }
 
@@ -63,7 +41,7 @@ jQuery(document).ready(function ($) {
             //Xử lý set total và set email đang sử dụng
             if (config.total == 0) {
                 config.total = sAccounts.length;
-                config.email_using = sAccount;
+                config.gmail_using = sAccount;
                 chrome.storage.sync.set({
                     config: config
                 });
@@ -119,6 +97,14 @@ jQuery(document).ready(function ($) {
 
                     var sFirstName = (config.data_name)[config.position].first_name;
                     var sLastName = (config.data_name)[config.position].last_name;
+
+                    //Lưu tách biết email, pass, email_recovery vào storage
+                    config.gmail_get_temp = sEmail;
+                    config.pass_get_temp = sPassWord;
+                    config.gmail_recovery_get_temp = sEmailRecovery;
+                    chrome.storage.sync.set({
+                        config: config
+                    });
 
                     //Show gmail create
                     var sHtml = '<p class="extension-show-comment">' +
@@ -227,9 +213,6 @@ jQuery(document).ready(function ($) {
     }
 
     function handlePhone(sEmailRecovery, getPhoneInterval) {
-        console.log("window.sNumCallPhone:" + window.sNumCallPhone);
-        console.log("window.sPhoneCanUse:" + window.sPhoneCanUse);
-        console.log("window.enteringPhone:" + window.enteringPhone);
         if (window.sNumCallPhone >= 20) {
             showNotyTop("Lỗi sai số quá nhiều. đang chuyển hướng về trang Google", '', 'error');
             setTimeout(() => {
@@ -240,6 +223,9 @@ jQuery(document).ready(function ($) {
                 type: 'GET',
                 url: dUrlGetNumber,
                 success: function (data) {
+                    console.log("Call api get phone success:");
+                    console.log(data);
+                    console.log("********************");
                     window.sNumCallPhone = window.sNumCallPhone + 1;
                     if (data.ResponseCode == 0 || data.Msg == "OK") {
                         window.enteringPhone = true;
@@ -265,7 +251,8 @@ jQuery(document).ready(function ($) {
 
                         //Kiểm tra số lấy được có nằm trong danh sách số die không
                         if (sPhoneDie.includes(sNumGeted.replace('+84', ''))) {
-                            showNotyBottom('Số đã nằm trong danh sách die, Chờ lấy số khác.');
+                            window.enteringPhone = false;
+                            showNotyBottom('Số: ' + '<span class="color-yellow">' + sNumGeted + '</span>' + ' đã nằm trong danh sách die, Chờ lấy số khác.');
                             /**************************/
                             //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
                             /**************************/
@@ -321,8 +308,9 @@ jQuery(document).ready(function ($) {
                         //Click tiep theo sau khi nhap so dien thoai
                         if ($('.dG5hZc .qhFLie button')) {
                             $('.dG5hZc .qhFLie button').click()
-                            window.enteringPhone = false;
                             $('p.extension-show-info').remove();
+
+                            window.enteringPhone = false;
                             setTimeout(() => {
                                 var currentUrl = window.location.href;
                                 if (currentUrl.includes('webgradsidvphone')) {
@@ -351,9 +339,6 @@ jQuery(document).ready(function ($) {
         window.sNumGetCode = 0;
         window.sGetCodeSuccess = false;
         window.sLoadingGetCode = false;
-        console.log("window.sNumGetCode:" + window.sNumGetCode);
-        console.log("window.sGetCodeSuccess:" + window.sGetCodeSuccess);
-        console.log("window.sLoadingGetCode:" + window.sLoadingGetCode);
         showNotyBottom("Vui lòng chờ lấy code");
         var getCodeInterval = setInterval(() => {
             if (window.sGetCodeSuccess == false) {
@@ -369,6 +354,9 @@ jQuery(document).ready(function ($) {
                         type: 'GET',
                         url: sUrlGetCode,
                         success: function (data) {
+                            console.log("Call api get code success:");
+                            console.log(data);
+                            console.log("***************");
                             window.sLoadingGetCode = false;
                             if (data.Result.Code) {
                                 clearInterval(getCodeInterval);
@@ -508,8 +496,13 @@ jQuery(document).ready(function ($) {
             //Tăng position khi tạo gmail vị trí hiện tại thành công
             chrome.storage.sync.get('config', function (result) {
                 config = result.config;
-                config.email_success = config.email_success + ' *** ' + config.email_using;
+
+                config.gmail_get = config.gmail_get + config.gmail_get_temp + '@gmail.com' + '\n';
+                config.pass_get = config.pass_get + config.pass_get_temp + '\n';
+                config.gmail_recovery_get = config.gmail_recovery_get + config.gmail_recovery_get_temp + '\n';
+                config.gmail_success = config.gmail_success + config.gmail_using + '\n';
                 config.position = config.position + 1;
+
                 if (config.position >= config.total) {
                     config.start = 'no';
                 }
@@ -524,7 +517,6 @@ jQuery(document).ready(function ($) {
                     $('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc').click();
                 }
             }, sTe * 3);
-
         }, sTe);
     }
 
