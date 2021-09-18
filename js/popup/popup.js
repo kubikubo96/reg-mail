@@ -20,7 +20,7 @@ jQuery(document).ready(function ($) {
             for (let i = 0; i < 10; i++) {
                 var firstName = random_item(dFirstName);
                 var lastName = random_item(dLastName);
-                var email = removeViTones(lastName).toLowerCase().replaceAll(' ', '') + removeViTones(firstName).toLowerCase().replaceAll(' ', '') + randomChars(3).toLowerCase() + randomIntFromRange(11111111, 99999999) + '@gmail.com';
+                var email = removeViTones(firstName).toLowerCase().replaceAll(' ', '') + removeViTones(lastName).toLowerCase().replaceAll(' ', '') + randomChars(3).toLowerCase() + randomIntFromRange(11111111, 99999999) + '@gmail.com';
                 var pass = randomChars();
                 var emailRcovery = random_item(dEmailRecovery);
                 var group_mail = email + '|' + pass + '|' + emailRcovery;

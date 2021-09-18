@@ -18,7 +18,7 @@ jQuery(document).ready(function ($) {
         console.log("🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍🏍");
 
         if (config.start == "no") {
-            showNotyNormal("CHÚC MỪNG đã tạo xong danh sách gmail.")
+            showNotyTop("CHÚC MỪNG đã tạo xong danh sách gmail.")
 
 
             //Lưu Phone die về máy
@@ -45,7 +45,7 @@ jQuery(document).ready(function ($) {
         }
 
         if (config.account == '') {
-            showNotyNormal("Danh sách gmail cần tạo đang rỗng", "error");
+            showNotyTop("Danh sách gmail cần tạo đang rỗng", '', "error");
             return false;
         }
 
@@ -71,7 +71,7 @@ jQuery(document).ready(function ($) {
 
             //Chuyển hướng về trang Google nếu đang ở sai trang
             if (sDomain != sAc && sDomain != sGo) {
-                showNotyDuration('Đang Chuyển hướng về trang Google', sTe);
+                showNotyBottom('Đang Chuyển hướng về trang Google');
                 setTimeout(() => {
                     window.location.href = 'https://' + sGo;
                 }, sTe);
@@ -79,7 +79,7 @@ jQuery(document).ready(function ($) {
 
             //Xử lý nếu đang ở trang chủ Google
             if (sDomain == sGo) {
-                showNotyDuration('Đang Chuyển hướng trang Đăng ký', sTe * 2);
+                showNotyBottom('Đang Chuyển hướng trang Đăng ký');
                 setTimeout(() => {
                     window.location.href = sUp;
                 }, sTe * 2);
@@ -97,8 +97,7 @@ jQuery(document).ready(function ($) {
             var sUrlFull = window.location.href;
             var sFlowEntry = getUrlParameter('flowEntry', sUrlFull);
             if (sFlowEntry == "ServiceLogin" || sUrlFull.includes('identifier')) {
-                console.log("Đang ở trang đăng nhập");
-                showNotyDuration('Đang chuyển hướng trang Đăng ký', sTe * 2);
+                showNotyBottom('Đang chuyển hướng trang Đăng ký');
                 setTimeout(() => {
                     window.location.href = sUp;
                 }, sTe);
@@ -111,8 +110,7 @@ jQuery(document).ready(function ($) {
             var sUrlFull = window.location.href;
             var sFlowEntry = getUrlParameter('flowEntry', sUrlFull);
             if (sFlowEntry == "SignUp" || sUrlFull.includes('webcreateaccount')) {
-                console.log("Đang ở trang đăng ký");
-                showNotyNormal('Nhập thông tin đăng ký');
+                showNotyBottom('Nhập thông tin đăng ký');
                 if (sAccount) {
                     var aAccount = sAccount.split('|');
                     var sEmail = $.trim(aAccount[0]).replace('@gmail.com', '');
@@ -122,21 +120,20 @@ jQuery(document).ready(function ($) {
                     var sLastName = (config.data_name)[config.position].last_name;
 
                     //Show gmail create
-                    $('p.extension-show-comment').remove();
                     var sHtml = '<p class="extension-show-comment">' +
-                        '- Họ:                  ' + '<span class="color-yellow">' + sLastName + '</span>' + '<br>' +
-                        '- Tên:                 ' + '<span class="color-yellow">' + sFirstName + '</span>' + '<br>' +
+                        '- Họ:                  ' + '<span class="color-yellow">' + sFirstName + '</span>' + '<br>' +
+                        '- Tên:                 ' + '<span class="color-yellow">' + sLastName + '</span>' + '<br>' +
                         '- Email:               ' + '<span class="color-yellow">' + sEmail + '@gmail.com' + '</span>' + '<br>' +
                         '- Mật Khẩu:            ' + '<span class="color-yellow">' + sPassWord + '</span>' + '<br>' +
                         '</p>';
-                    $(sHtml).appendTo('body');
+                    showNotyTop('', sHtml);
 
                     /*********************/
                     //Nhập thông tin đăng ký gmail
                     enterInfoRegister(sEmail, sPassWord, sEmailRecovery, sFirstName, sLastName)
                     /*********************/
                 } else {
-                    showNotyNormal('Không lấy được tài khoản gmail, đang chuyển về trang chủ Google', 'error');
+                    showNotyBottom('Không lấy được tài khoản gmail, đang chuyển về trang chủ Google', 'error');
                     setTimeout(() => {
                         window.location.href = 'https://' + sGo;
                     }, sTe * 2);
@@ -146,84 +143,68 @@ jQuery(document).ready(function ($) {
     });
 
     //Nhập thông tin đăng ký gmail
-    function enterInfoRegister(sEmail, sPassWord, sEmailRecovery, sFirstName, sLastName) {
+    function enterInfoRegister(sEmail, sPassWord, sEmailRecovery, sFirstName, sLastName) { //sFirstName: họ, sLastName: tên
+        showNotyBottom('Nhập họ: ' + sFirstName);
         setTimeout(() => {
-            //Nhap Last Name: Họ
-            $('p.extension-show-info').remove();
-            var sHtml = '<p class="extension-show-info">Nhập họ</p>';
-            $(sHtml).appendTo('body');
+            //Nhap Họ
             $('form input[name=lastName]').bind('autotyped', function () {
-            }).autotype(sLastName, { delay: randomIntFromRange(80, 200) });
+            }).autotype(sFirstName, { delay: randomIntFromRange(80, 200) });
 
+            showNotyBottom('Nhập tên: ' + sLastName);
             setTimeout(() => {
-                //Nhap First Name: Tên
-                $('p.extension-show-info').remove();
-                var sHtml = '<p class="extension-show-info">Nhập tên</p>';
-                $(sHtml).appendTo('body');
+                //Nhap Tên
                 $('form input[name=firstName]').bind('autotyped', function () {
-                }).autotype(sFirstName, { delay: randomIntFromRange(80, 200) });
+                }).autotype(sLastName, { delay: randomIntFromRange(80, 200) });
 
+                showNotyBottom('Nhập email: ' + sEmail);
                 setTimeout(() => {
                     //Nhap User Name: Email
-                    $('p.extension-show-info').remove();
-                    var sHtml = '<p class="extension-show-info">Nhập Email</p>';
-                    $(sHtml).appendTo('body');
                     $('form input[name=Username]').bind('autotyped', function () {
                     }).autotype(sEmail, { delay: randomIntFromRange(80, 200) });
 
+                    showNotyBottom('Nhập password: ' + sPassWord);
                     setTimeout(() => {
                         //Nhap Mật khẩu
-                        $('p.extension-show-info').remove();
-                        var sHtml = '<p class="extension-show-info">Nhập mật khẩu</p>';
-                        $(sHtml).appendTo('body');
                         $('form input[name=Passwd]').bind('autotyped', function () {
                         }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
 
+                        showNotyBottom('Nhập lại password: ' + sPassWord);
                         setTimeout(() => {
                             //Nhap Lại Mật khẩu
-                            $('p.extension-show-info').remove();
-                            var sHtml = '<p class="extension-show-info">Nhập lại mật khẩu</p>';
-                            $(sHtml).appendTo('body');
                             $('form input[name=ConfirmPasswd]').bind('autotyped', function () {
                             }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
 
+                            showNotyBottom('Bật hiện thị mật khẩu');
                             setTimeout(() => {
                                 //Checked xem mật khẩu
-                                $('p.extension-show-info').remove();
-                                var sHtml = '<p class="extension-show-info">Bật hiển thị mật khẩu</p>';
-                                $(sHtml).appendTo('body');
                                 if ($('input.VfPpkd-muHVFf-bMcfAe')) {
                                     $('input.VfPpkd-muHVFf-bMcfAe').prop('checked', true);
                                 }
 
+                                showNotyBottom('Đang chuyển trang nhập số điện thoại');
                                 setTimeout(() => {
                                     if ($('button.nCP5yc')) {
                                         $('button.nCP5yc').click();
-
-                                        $('p.extension-show-info').remove();
-                                        var sHtml = '<p class="extension-show-info">Đang chuyển trang nhập số điện thoại</p>';
-                                        $(sHtml).appendTo('body');
                                     }
 
-                                    showNotyNormal('Vui lòng chờ lấy số.');
                                     /*********************/
                                     //Xử lý lấy số điện thoại
                                     getPhoneAPI(sEmailRecovery);
                                     /*********************/
 
-                                }, sTe);
+                                }, 10000);
 
-                            }, sTe);
+                            }, 7000);
 
-                        }, 7000)
+                        }, 10000)
 
-                    }, 13000)
+                    }, 15000)
 
-                }, 7000);
+                }, 10000);
 
-            }, 7000);
+            }, 10000);
 
-        }, 7000);
+        }, 10000);
     }
 
     //Xử lý get Phone
@@ -231,17 +212,12 @@ jQuery(document).ready(function ($) {
         window.sNumCallPhone = 0;
         window.sPhoneCanUse = false;
         window.loadingGetPhone = false;
-        $('p.extension-show-info').remove();
-        $('p.extension-show-comment').remove();
-        showNotyNormal('Đang lấy số.');
-        setTimeout(() => {
-            $('p.extension-show-comment').remove();
-        }, 2000);
+        showNotyBottom('Đang lấy số');
         setInterval(() => {
             if (window.sPhoneCanUse == false) {
                 if (window.sNumCallPhone >= 20) {
                     $('p.extension-show-comment').remove();
-                    showNotyDuration("Lỗi sai số quá nhiều. đang chuyển hướng về trang Google", sTe);
+                    showNotyTop("Lỗi sai số quá nhiều. đang chuyển hướng về trang Google", '', 'error');
                     setTimeout(() => {
                         window.location.href = 'https://' + sGo;
                     }, sTe);
@@ -285,7 +261,7 @@ jQuery(document).ready(function ($) {
                             }
                         },
                         error: function (xhr, status, error) {
-                            showNotyDuration("Lỗi lấy số data từ API, đang chuyển trang Google", 1000 * 120);
+                            showNotyTop("Lỗi lấy số data từ API, đang chuyển trang Google", '', 'error');
                             setTimeout(() => {
                                 window.location.href = 'https://' + sGo;
                             }, 1000 * 120);
@@ -300,11 +276,7 @@ jQuery(document).ready(function ($) {
     //Xử lý nhập số điện thoại
     function enterPhone(sNumGeted, sUrlGetCode, sEmailRecovery) {
         sNumGeted = "+84" + sNumGeted;
-        $('p.extension-show-info').remove();
-        $('p.extension-show-comment').remove();
-        var sHtml = '<p class="extension-show-info">Lấy Thành công: ' + '<span class="color-yellow">' + sNumGeted + '<span>' + '</p>';
-        $(sHtml).appendTo('body');
-
+        showNotyBottom('Lấy Thành công: ' + '<span class="color-yellow">' + sNumGeted + '<span>');
         //Bấm chọn Mã vùng
         setTimeout(() => {
             if ($('.WEQkZc .VfPpkd-TkwUic')) {
@@ -323,12 +295,14 @@ jQuery(document).ready(function ($) {
             //Nhập số điện thoại
             if ($('#phoneNumberId')) {
                 $('#phoneNumberId').val('');
+                showNotyBottom('Đang nhập số: ' + '<span class="color-yellow">' + sNumGeted + '<span>');
                 setTimeout(() => {
                     $('#phoneNumberId').bind('autotyped', function () {
                     }).autotype(sNumGeted, { delay: randomIntFromRange(80, 200) });
 
                     setTimeout(() => {
                         //Click tiep theo sau khi nhap so dien thoai
+                        showNotyBottom('Ấn Button tiếp theo');
                         $('p.extension-show-info').remove();
                         if ($('.dG5hZc .qhFLie button')) {
                             $('.dG5hZc .qhFLie button').click()
@@ -338,8 +312,7 @@ jQuery(document).ready(function ($) {
                                 if (currentUrl.includes('webgradsidvphone')) {
                                     /**************************/
                                     //Tiep tuc lay PHONE_NUMBER --- chạy SetInterval Phone ---
-                                    $('p.extension-show-comment').remove();
-                                    showNotyNormal("Số không hợp lệ, chờ lấy lại. Thử lại lần: " + window.sNumCallPhone, "error");
+                                    showNotyBottom("Số không hợp lệ, chờ lấy lại. Thử lại lần: " + window.sNumCallPhone, 'error');
                                     /**************************/
                                 } else {
                                     /*********************/
@@ -361,12 +334,11 @@ jQuery(document).ready(function ($) {
         window.sGetCodeSuccess = false;
         window.loadingGetCode = false;
         window.sPhoneCanUse = true;
-        $('p.extension-show-info').remove();
-        showNotyNormal("Vui lòng chờ lấy code");
+        showNotyBottom("Vui lòng chờ lấy code");
         setInterval(() => {
             if (window.sGetCodeSuccess == false) {
                 if (window.sNumGetCode >= 10) {
-                    showNotyDuration("Lấy code thất bại. đang chuyển hướng Google: ", sTe);
+                    showNotyTop("Lấy code thất bại. đang chuyển hướng Google: ", '', 'error');
                     setTimeout(() => {
                         window.location.href = 'https://' + sGo;
                     }, sTe);
@@ -384,10 +356,7 @@ jQuery(document).ready(function ($) {
                             }
                             if (data.ResponseCode == 0 || data.Msg == "OK" || data.Msg == "Đã nhận được code") {
                                 var sCodeNum = data.Result.Code;
-                                $('p.extension-show-comment').remove();
-                                var sHtml = '<p class="extension-show-comment">' +
-                                    '- Lấy CODE thành công: ' + '<span class="color-yellow">' + sCodeNum + '</span>' + '<br>';
-                                $(sHtml).appendTo('body');
+                                showNotyBottom('Lấy code thành công, đang nhập code: ' + '<span class="color-yellow">' + sCodeNum + '</span>');
                                 if (sCodeNum) {
                                     $('input#code').click();
                                     setTimeout(() => {
@@ -397,7 +366,7 @@ jQuery(document).ready(function ($) {
 
                                     setTimeout(() => {
                                         $('p.extension-show-comment').remove();
-                                        showNotyNormal("Chuyển đến trang thông tin chi tiết");
+                                        showNotyBottom("Chuyển đến trang thông tin chi tiết");
                                         if ($('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ')) {
                                             $('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ').click()
 
@@ -409,12 +378,12 @@ jQuery(document).ready(function ($) {
                                     }, 7000);
                                 }
                             } else {
-                                showNotyNormal("Lấy code Thất bại, chờ lấy lại. Thử lại lần: " + window.sNumGetCode, "error");
+                                showNotyBottom("Lấy code Thất bại, chờ lấy lại. Thử lại lần: " + window.sNumGetCode, "error");
                             }
                         },
                         error: function (xhr, status, error) {
                             window.loadingGetCode = false;
-                            showNotyNormal("Lỗi lấy Code data từ API", "error");
+                            showNotyTop("Lỗi lấy Code data từ API, đang chuyển hướng trang Google", '', "error");
                             setTimeout(() => {
                                 window.location.href = 'https://' + sGo;
                             }, 1000 * 120);
@@ -434,63 +403,50 @@ jQuery(document).ready(function ($) {
             var sYear = randomIntFromRange(1988, 2002);
             var sMale = randomIntFromRange(1, 2);
             var tMale = sMale == 1 ? "Nam" : "Nữ";
-            $('p.extension-show-comment').remove();
             var sHtml = '<p class="extension-show-comment">' +
                 '- Email Khôi phục:         ' + '<span class="color-yellow">' + sEmailRecovery + '</span>' + '<br>' +
                 '- Ngày/Tháng/Năm Sinh:     ' + '<span class="color-yellow">' + sDay + '/' + sMonth + '/' + sYear + '</span>' + '<br>' +
                 '- Giới tính:               ' + '<span class="color-yellow">' + tMale + '</span>' + '<br>' +
                 '</p>';
-            $(sHtml).appendTo('body');
+            showNotyTop('', sHtml);
 
             var sCurrentUrl = window.location.href;
             if (sCurrentUrl.includes('webpersonaldetails')) {
                 //Xoa so dien thoai
                 $('#phoneNumberId').val('');
+                showNotyBottom('Nhập email khôi phục: ' + sEmailRecovery);
                 setTimeout(() => {
                     //Nhap email khoi phuc
-                    $('p.extension-show-info').remove();
-                    var sHtml = '<p class="extension-show-info">Nhập Email khôi phục</p>';
-                    $(sHtml).appendTo('body');
                     $('input[name=recoveryEmail]').bind('autotyped', function () {
                     }).autotype(sEmailRecovery, { delay: randomIntFromRange(80, 200) });
 
+                    showNotyBottom('Nhập ngày sinh: ' + sDay);
                     setTimeout(() => {
                         //Nhap ngay sinh
-                        $('p.extension-show-info').remove();
-                        var sHtml = '<p class="extension-show-info">Nhập ngày sinh</p>';
-                        $(sHtml).appendTo('body');
                         $('input[name=day]').val("");
                         setTimeout(() => {
                             $('input[name=day]').bind('autotyped', function () {
                             }).autotype(sDay, { delay: randomIntFromRange(80, 200) });
 
+                            showNotyBottom('Nhập tháng sinh: ' + sMonth);
                             setTimeout(() => {
                                 //Nhap thang sinh
-                                $('p.extension-show-info').remove();
-                                var sHtml = '<p class="extension-show-info">Nhập tháng sinh</p>';
-                                $(sHtml).appendTo('body');
                                 $('#month').val(sMonth).change();
 
+                                showNotyBottom('Nhập năm sinh: ' + sYear);
                                 setTimeout(() => {
                                     //Nhap nam sinh
-                                    $('p.extension-show-info').remove();
-                                    var sHtml = '<p class="extension-show-info">Nhập năm sinh</p>';
-                                    $(sHtml).appendTo('body');
                                     $('input[name=year]').val();
                                     setTimeout(() => {
                                         $('input[name=year]').val(sYear).change();
 
+                                        showNotyBottom('Nhập giới tính: ' + tMale);
                                         setTimeout(() => {
                                             //Nhap gioi tinh
-                                            $('p.extension-show-info').remove();
-                                            var sHtml = '<p class="extension-show-info">Nhập giới tính</p>';
-                                            $(sHtml).appendTo('body');
-                                            $('#gender').val(randomIntFromRange(1, 2)).change();
+                                            $('#gender').val(tMale).change();
 
+                                            showNotyBottom("Chuyển đến điều khoản Google");
                                             setTimeout(() => {
-                                                $('p.extension-show-info').remove();
-                                                $('p.extension-show-comment').remove();
-                                                showNotyNormal("Chuyển đến điều khoản Google");
                                                 //Click tiep theo => Chuyển đến điều khoản Google
                                                 if ($('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc')) {
                                                     $('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc').click();
@@ -522,13 +478,13 @@ jQuery(document).ready(function ($) {
     //Trang đồng ý điều khoản google
     function googleTerms() {
         setTimeout(() => {
-            $('p.extension-show-comment').remove();
-            showNotyNormal("Đồng Ý Với Điều Khoản Google");
+            showNotyBottom("Đồng Ý Với Điều Khoản Google");
 
             setTimeout(() => {
                 //Scroll đọc điều khoản google
                 scrollToBottom();
-            }, 4000);
+            }, 2000);
+
             //Tăng position khi tạo gmail vị trí hiện tại thành công
             chrome.storage.sync.get('config', function (result) {
                 config = result.config;
@@ -556,25 +512,35 @@ jQuery(document).ready(function ($) {
         $('html, body').animate({ scrollTop: randomIntFromRange(1000, 2000) }, randomIntFromRange(6000, 9000));
     }
 
-    function showNotyDuration(content, duration = sTe) {
-        var time = 1000;
-        setInterval(() => {
-            $('p.extension-show-comment').remove();
-            var sHtml = '<p class="extension-show-comment">' + content + ' sau ' + (duration / 1000) + 's : ' + time / 1000 + 's' + '</p>';
-            $(sHtml).appendTo('body');
-            time = time + 1000;
-        }, time);
+    function showNotyTop(content, sHtml = '', type = "success") {
+        $('p.extension-show-comment').remove();
+        if (type == "success")
+            sHtml = sHtml ? sHtml : '<p class="extension-show-comment">' + content + ' : ' + '</p>';
+        else
+            sHtml = sHtml ? sHtml : '<p class="extension-show-comment error">' + content + '</p>';
+
+        $(sHtml).appendTo('body');
 
     }
 
-    function showNotyNormal(content, type = "success") {
-        $('p.extension-show-comment').remove();
-        if (type == "success") {
-            var sHtml = '<p class="extension-show-comment">' + content + '</p>';
-        } else {
-            var sHtml = '<p class="extension-show-comment error">' + content + '</p>';
-        }
-        $(sHtml).appendTo('body');
+    function showNotyBottom(content, type = "success") {
+        $('p.extension-show-info').remove();
+        if (window.inTime)
+            clearInterval(window.inTime);
+        if (type == "success")
+            var sHtml = '<p class="extension-show-info">' + content + '</p>';
+        else
+            var sHtml = '<p class="extension-show-info error">' + content + '</p>';
+
+        var time = 0;
+        window.inTime = setInterval(() => {
+            time = time + 1;
+            $('p.extension-show-time').remove();
+            var sTimeHtml = '<p class="extension-show-time">' + time + '</p>'
+            $(sTimeHtml).appendTo('body ');
+        }, 1000);
+
+        $(sHtml).appendTo('body ');
     }
 
     //Get Param url
