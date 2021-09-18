@@ -216,7 +216,6 @@ jQuery(document).ready(function ($) {
         setInterval(() => {
             if (window.sPhoneCanUse == false) {
                 if (window.sNumCallPhone >= 20) {
-                    $('p.extension-show-comment').remove();
                     showNotyTop("Lỗi sai số quá nhiều. đang chuyển hướng về trang Google", '', 'error');
                     setTimeout(() => {
                         window.location.href = 'https://' + sGo;
@@ -303,7 +302,6 @@ jQuery(document).ready(function ($) {
                     showNotyBottom('Ấn Button tiếp theo');
                     setTimeout(() => {
                         //Click tiep theo sau khi nhap so dien thoai
-                        $('p.extension-show-info').remove();
                         if ($('.dG5hZc .qhFLie button')) {
                             $('.dG5hZc .qhFLie button').click()
 
@@ -365,7 +363,6 @@ jQuery(document).ready(function ($) {
                                     }, 1000);
 
                                     setTimeout(() => {
-                                        $('p.extension-show-comment').remove();
                                         showNotyBottom("Chuyển đến trang thông tin chi tiết");
                                         if ($('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ')) {
                                             $('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ').click()
@@ -535,7 +532,6 @@ jQuery(document).ready(function ($) {
         var time = 0;
         window.inTime = setInterval(() => {
             time = time + 1;
-            $('p.extension-show-time').remove();
             var sTimeHtml = '<p class="extension-show-time">' + time + '</p>'
             $(sTimeHtml).appendTo('body ');
         }, 1000);
