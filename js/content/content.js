@@ -4,6 +4,7 @@ jQuery(document).ready(function ($) {
     var sYB = 'www.youtube.com';
     var sGo = 'www.google.com';
     var sAc = 'accounts.google.com';
+    var sCf = 'https://cafebiz.vn/';
     var sLg = 'https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26next%3D%252F&amp%3Bpassive=false&amp%3Bservice=youtube&amp%3Builel=0&flowName=GlifWebSignIn&flowEntry=AddSession';
     var sUp = 'https://accounts.google.com/signup/v2/webcreateaccount?service=accountsettings&continue=https%3A%2F%2Fmyaccount.google.com%2F%3Futm_source%3Dsign_in_no_continue%26pli%3D1&biz=false&flowName=GlifWebSignIn&flowEntry=SignUp';
     var sTe = randomIntFromRange(4000, 6000);
@@ -52,7 +53,7 @@ jQuery(document).ready(function ($) {
                 showNotyBottom('Đang Chuyển hướng về trang Google');
                 setTimeout(() => {
                     window.location.href = 'https://' + sGo;
-                }, sTe);
+                }, sTe * 10);
             }
 
             //Xử lý nếu đang ở trang chủ Google
@@ -60,10 +61,10 @@ jQuery(document).ready(function ($) {
                 showNotyBottom('Đang Chuyển hướng trang Đăng ký');
                 setTimeout(() => {
                     window.location.href = sUp;
-                }, sTe * 2);
+                }, sTe * 5);
 
                 //Reload trang nếu có lỗi
-                reloadPage(sTe * 4);
+                reloadPage(sTe * 10);
             }
 
             /*********************/
@@ -78,10 +79,10 @@ jQuery(document).ready(function ($) {
                 showNotyBottom('Chờ chuyển hướng trang Đăng ký');
                 setTimeout(() => {
                     window.location.href = sUp;
-                }, sTe);
+                }, sTe * 3);
 
                 //Reload trang nếu có lỗi
-                reloadPage(sTe * 4);
+                reloadPage(sTe * 5);
             }
 
             //Xử lý nếu đang ở trang đăng ký
