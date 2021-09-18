@@ -35,7 +35,7 @@ jQuery(document).ready(function ($) {
         $inputExtensionAccount.val(config.account);
         $btnSave.click(() => {
             config.account = $inputExtensionAccount.val();
-            config.data_name = dataNames;
+            config.data_name = dataNames.length > 0 ? dataNames : config.data_name;
 
             chrome.storage.sync.set({
                 config: config

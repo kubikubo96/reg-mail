@@ -97,7 +97,7 @@ jQuery(document).ready(function ($) {
             var sUrlFull = window.location.href;
             var sFlowEntry = getUrlParameter('flowEntry', sUrlFull);
             if (sFlowEntry == "ServiceLogin" || sUrlFull.includes('identifier')) {
-                showNotyBottom('Đang chuyển hướng trang Đăng ký');
+                showNotyBottom('Chờ chuyển hướng trang Đăng ký');
                 setTimeout(() => {
                     window.location.href = sUp;
                 }, sTe);
@@ -110,7 +110,7 @@ jQuery(document).ready(function ($) {
             var sUrlFull = window.location.href;
             var sFlowEntry = getUrlParameter('flowEntry', sUrlFull);
             if (sFlowEntry == "SignUp" || sUrlFull.includes('webcreateaccount')) {
-                showNotyBottom('Nhập thông tin đăng ký');
+                showNotyBottom('Chờ nhập thông tin đăng ký');
                 if (sAccount) {
                     var aAccount = sAccount.split('|');
                     var sEmail = $.trim(aAccount[0]).replace('@gmail.com', '');
@@ -145,44 +145,44 @@ jQuery(document).ready(function ($) {
 
     //Nhập thông tin đăng ký gmail
     function enterInfoRegister(sEmail, sPassWord, sEmailRecovery, sFirstName, sLastName) { //sFirstName: họ, sLastName: tên
-        showNotyBottom('Nhập họ: ' + sFirstName);
+        showNotyBottom('Chờ nhập họ: ' + sFirstName);
         setTimeout(() => {
             //Nhap Họ
             $('form input[name=lastName]').bind('autotyped', function () {
             }).autotype(sFirstName, { delay: randomIntFromRange(80, 200) });
 
-            showNotyBottom('Nhập tên: ' + sLastName);
+            showNotyBottom('Chờ nhập tên: ' + sLastName);
             setTimeout(() => {
                 //Nhap Tên
                 $('form input[name=firstName]').bind('autotyped', function () {
                 }).autotype(sLastName, { delay: randomIntFromRange(80, 200) });
 
-                showNotyBottom('Nhập email: ' + sEmail);
+                showNotyBottom('Chờ nhập email: ' + sEmail);
                 setTimeout(() => {
                     //Nhap User Name: Email
                     $('form input[name=Username]').bind('autotyped', function () {
                     }).autotype(sEmail, { delay: randomIntFromRange(80, 200) });
 
-                    showNotyBottom('Nhập password: ' + sPassWord);
+                    showNotyBottom('Chờ nhập password: ' + sPassWord);
                     setTimeout(() => {
                         //Nhap Mật khẩu
                         $('form input[name=Passwd]').bind('autotyped', function () {
                         }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
 
-                        showNotyBottom('Nhập lại password: ' + sPassWord);
+                        showNotyBottom('Chờ nhập lại password: ' + sPassWord);
                         setTimeout(() => {
                             //Nhap Lại Mật khẩu
                             $('form input[name=ConfirmPasswd]').bind('autotyped', function () {
                             }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
 
-                            showNotyBottom('Bật hiện thị mật khẩu');
+                            showNotyBottom('Chờ nật hiện thị mật khẩu');
                             setTimeout(() => {
                                 //Checked xem mật khẩu
                                 if ($('input.VfPpkd-muHVFf-bMcfAe')) {
                                     $('input.VfPpkd-muHVFf-bMcfAe').prop('checked', true);
                                 }
 
-                                showNotyBottom('Đang chuyển trang nhập số điện thoại');
+                                showNotyBottom('Chờ chuyển trang');
                                 setTimeout(() => {
                                     if ($('button.nCP5yc')) {
                                         $('button.nCP5yc').click();
@@ -213,7 +213,7 @@ jQuery(document).ready(function ($) {
         window.sNumCallPhone = 0;
         window.sPhoneCanUse = false;
         window.loadingGetPhone = false;
-        showNotyBottom('Đang lấy số');
+        showNotyBottom('Chờ lấy số');
         setInterval(() => {
             if (window.sPhoneCanUse == false) {
                 if (window.sNumCallPhone >= 20) {
@@ -456,19 +456,19 @@ jQuery(document).ready(function ($) {
                                                 }
                                             }, 10000);
 
-                                        }, sTe);
+                                        }, 8000);
 
-                                    }, sTe);
+                                    }, 8000);
 
-                                }, sTe);
+                                }, 8000);
 
-                            }, sTe);
+                            }, 8000);
 
-                        }, sTe);
+                        }, 8000);
 
                     }, 12000);
 
-                }, sTe);
+                }, 8000);
             }
         }, sTe);
     }
@@ -512,6 +512,8 @@ jQuery(document).ready(function ($) {
 
     function showNotyTop(content, sHtml = '', type = "success") {
         $('p.extension-show-comment').remove();
+        $('p.extension-show-comment').remove();
+        $('p.extension-show-comment').remove();
         if (type == "success")
             sHtml = sHtml ? sHtml : '<p class="extension-show-comment">' + content + ' : ' + '</p>';
         else
@@ -522,6 +524,8 @@ jQuery(document).ready(function ($) {
     }
 
     function showNotyBottom(content, type = "success") {
+        $('p.extension-show-info').remove();
+        $('p.extension-show-info').remove();
         $('p.extension-show-info').remove();
         if (window.inTime)
             clearInterval(window.inTime);

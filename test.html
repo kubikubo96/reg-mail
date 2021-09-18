@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Static Template</title>
+    <link rel="stylesheet" href="app.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1 id="title">DATA:</h1>
+    <h3 id="show"></h3>
+  </body>
+  <script>
+    function random_item(items) {
+      return items[Math.floor(Math.random() * items.length)];
+    }
+
+    dFirstName = ["sông an", "sông cầu", 'tình thướng', 'đời thường'];
+    dLastName = ["vui", "quần", 'bình'];
+    var data_name = [];
+    for (let i = 0; i < 10; i++) {
+      var gName = {
+        first_name: random_item(dFirstName),
+        last_name: random_item(dLastName)
+      };
+      data_name.push(gName);
+    }
+    console.log(data_name);
+  </script>
+</html>

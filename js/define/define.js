@@ -54,7 +54,10 @@ var dEmailRecovery = [
 
 var data_name = [];
 for (let i = 0; i < 10; i++) {
-    var gName = { 'first_name': random_item(dFirstName), 'last_name': random_item(dLastName) };
+    var gName = {
+        first_name: random_item(dFirstName),
+        last_name: random_item(dLastName)
+    };
     data_name.push(gName);
 }
 
