@@ -52,18 +52,47 @@ var dEmailRecovery = [
     'akuradio0019@gmail.com'
 ];
 
+var data_name = [];
+for (let i = 0; i < 10; i++) {
+    var gName = { 'first_name': random_item(dFirstName), 'last_name': random_item(dLastName) };
+    data_name.push(gName);
+}
+
 var dPhoneDie1 = ['877724541', '877721950', '877723678', '877726937', '877730140', '877730158', '949919610'];
 var dPhoneDie2 = ["813144225", "818199075", "918096733", "816628311", "817602391", "813673848", "812489622", "837292085", "879680350", "879039081", "879039073", "879833257", "879805350", "879817758", "879819054", "879817940", "879673980", "879681373", "879781053", "879808151", "879807275", "879781571", "879781002", "879030841", "879807971", "879032981", "879030827", "879031030", "877733995", "879039332", "879028795", "877735262", "879806857", "879809005", "879808465", "879808462", "879801391", "879781004", "879704337", "879783470", "837285770", "818196763", "827069788", "813787539", "817474510", "836085692", "877727579", "877727163", "917809832", "877728508", "877728039", "877723835", "877725008"];
 
 dPhoneDieOrigin = dPhoneDie1.concat(dPhoneDie2);
+
+
 
 var initConfigDefine = {
     'start': 'yes',
     'account': window.dfAccounts,
     'position': 0,
     'total': 0,
-    'data_name': [], // [{ 'first_name': firstName, 'last_name': lastName }]
+    'data_name': data_name,
     'email_using': '',
     'email_success': '',
     'phone_die': []
 };
+
+
+//Random Item
+function random_item(items) {
+    return items[Math.floor(Math.random() * items.length)];
+}
+
+//Random Array
+function random_arr(arr, n) {
+    var newArr = [];
+    var i = 0;
+    if (n > arr.length) n = arr.length;
+    while (i < n) {
+        let item = arr[Math.floor(Math.random() * arr.length)];
+        if (!newArr.includes(item)) {
+            newArr.push(item);
+            i++;
+        }
+    }
+    return newArr;
+}

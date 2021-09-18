@@ -116,6 +116,7 @@ jQuery(document).ready(function ($) {
                     var sEmail = $.trim(aAccount[0]).replace('@gmail.com', '');
                     var sPassWord = $.trim(aAccount[1]);
                     var sEmailRecovery = $.trim(aAccount[2]);
+
                     var sFirstName = (config.data_name)[config.position].first_name;
                     var sLastName = (config.data_name)[config.position].last_name;
 
@@ -288,7 +289,7 @@ jQuery(document).ready(function ($) {
             if ($('li.VfPpkd-StrnGf-rymPhb-ibnC6b[data-value=vn]')) {
                 $('li.VfPpkd-StrnGf-rymPhb-ibnC6b[data-value=vn]').click();
             }
-        }, 1000 * 4);
+        }, 1000 * 5);
 
         setTimeout(() => {
             //Nhập số điện thoại
@@ -318,12 +319,12 @@ jQuery(document).ready(function ($) {
                                     getCodeAPI(sUrlGetCode, sEmailRecovery);
                                     /*********************/
                                 }
-                            }, 5000);
+                            }, 8000);
                         }
-                    }, sTe);
+                    }, 8000);
                 }, 2000);
             }
-        }, 1000 * 6);
+        }, 1000 * 9);
     }
 
     //Xử lý Get Code
@@ -531,6 +532,7 @@ jQuery(document).ready(function ($) {
 
         var time = 0;
         window.inTime = setInterval(() => {
+            $('p.extension-show-time').remove();
             time = time + 1;
             var sTimeHtml = '<p class="extension-show-time">' + time + '</p>'
             $(sTimeHtml).appendTo('body ');
