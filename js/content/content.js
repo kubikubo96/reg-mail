@@ -635,7 +635,7 @@ jQuery(document).ready(function ($) {
 
             //Nếu ở 1 trang quá 10p thì chuyển về trang google 
             sTot = sTot + sTe * 2;
-            console.log("Thời gian còn lại ở 1 trang:" + 1000 * 60 * 10 - sTot + 's');
+            console.log("Thời gian còn lại ở 1 trang:" + (1000 * 60 * 10 - sTot)/1000 + 's');
             console.log("**********");
             if (sTot > (1000 * 60 * 10)) {
                 window.location.href = 'https://' + sGo;
