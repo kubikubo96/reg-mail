@@ -635,7 +635,7 @@ jQuery(document).ready(function ($) {
 
             //Nếu ở 1 trang quá 15p thì chuyển về trang google 
             sTot = sTot + sTe * 2;
-            console.log("Thời gian còn lại:  ~ " + Math.round((1000 * 60 * 15 - sTot) / 1000 / 60) + ' Phút');
+            console.log("TGCL:  ~ " + Math.round((1000 * 60 * 15 - sTot) / 1000) + ' Giây');
             console.log("**********");
             if (sTot > (1000 * 60 * 15)) {
                 window.location.href = 'https://' + sGo;
