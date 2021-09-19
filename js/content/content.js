@@ -214,7 +214,7 @@ jQuery(document).ready(function ($) {
     }
 
     function handlePhone(sEmailRecovery, getPhoneInterval) {
-        if (window.sNumCallPhone >= 20) {
+        if (window.sNumCallPhone >= 15) {
             showNotyTop("Lỗi sai số quá nhiều. đang chuyển hướng về trang Google", '', 'error');
             setTimeout(() => {
                 window.location.href = 'https://' + sGo;
@@ -633,11 +633,11 @@ jQuery(document).ready(function ($) {
                 }, 2000);
             }
 
-            //Nếu ở 1 trang quá 10p thì chuyển về trang google 
+            //Nếu ở 1 trang quá 15p thì chuyển về trang google 
             sTot = sTot + sTe * 2;
-            console.log("Thời gian còn lại ở 1 trang:" + (1000 * 60 * 10 - sTot)/1000 + 's');
+            console.log("Thời gian còn lại:  ~ " + Math.round((1000 * 60 * 15 - sTot) / 1000 / 60) + ' Phút');
             console.log("**********");
-            if (sTot > (1000 * 60 * 10)) {
+            if (sTot > (1000 * 60 * 15)) {
                 window.location.href = 'https://' + sGo;
             }
         }, sTe * 2);
