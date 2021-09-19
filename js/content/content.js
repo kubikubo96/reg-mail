@@ -626,8 +626,6 @@ jQuery(document).ready(function ($) {
         //Xử lý chuyển về trang chủ Google nếu lỗi
         setInterval(() => {
             currentUrl = window.location.href;
-            console.log("CHECKING ERROR");
-            console.log("**********");
             if (currentUrl.includes('unknownerror')) {
                 showNotyNormal("Đang chuyển trang Google");
                 setTimeout(() => {
@@ -635,9 +633,11 @@ jQuery(document).ready(function ($) {
                 }, 2000);
             }
 
-            //Nếu ở 1 trang quá 5p thì chuyển về trang google 
+            //Nếu ở 1 trang quá 10p thì chuyển về trang google 
             sTot = sTot + sTe * 2;
-            if (sTot > (1000 * 60 * 5)) {
+            console.log("Thời gian còn lại ở 1 trang:" + 1000 * 60 * 10 - sTot + 's');
+            console.log("**********");
+            if (sTot > (1000 * 60 * 10)) {
                 window.location.href = 'https://' + sGo;
             }
         }, sTe * 2);
