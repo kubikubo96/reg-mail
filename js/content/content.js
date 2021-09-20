@@ -190,7 +190,7 @@ jQuery(document).ready(function ($) {
                                                 getPhoneAPI(sEmailRecovery);
                                                 /*********************/
                                             } else {
-                                                showNotyTop("Đã có lỗi khi nhập thông tin đăng ký, đang chuyển trang", '', 'error');
+                                                showNotyTop("Đã có lỗi khi nhập thông tin đăng ký, đang chuyển trang Google", '', 'error');
                                                 setTimeout(() => {
                                                     window.location.href = 'https://' + sGo;
                                                 }, sTe + 1000);
