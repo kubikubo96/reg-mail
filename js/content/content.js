@@ -9,6 +9,11 @@ jQuery(document).ready(function ($) {
     var sUp = 'https://accounts.google.com/signup/v2/webcreateaccount?service=accountsettings&continue=https%3A%2F%2Fmyaccount.google.com%2F%3Futm_source%3Dsign_in_no_continue%26pli%3D1&biz=false&flowName=GlifWebSignIn&flowEntry=SignUp';
     var sTe = randomIntFromRange(4000, 6000);
     var sTot = 0;
+    window.sInEnterInforRegister = false;
+    window.sInEnterPhone = false;
+    window.sInEnterCode = false;
+    window.sInEnterInfoDetail = false;
+    window.sInAgree = false;
 
     //Get Account
     chrome.storage.sync.get('config', function (result) {
@@ -147,20 +152,23 @@ jQuery(document).ready(function ($) {
                 showNotyBottom('Chờ nhập email: ' + sEmail);
                 setTimeout(() => {
                     //Nhap User Name: Email
-                    $('form input[name=Username]').bind('autotyped', function () {
-                    }).autotype(sEmail, { delay: randomIntFromRange(80, 200) });
+                    /*$('form input[name=Username]').bind('autotyped', function () {
+                    }).autotype(sEmail, { delay: randomIntFromRange(80, 200) });*/
+                    $('form input[name=Username]').val(sEmail);
 
                     showNotyBottom('Chờ nhập password: ' + sPassWord);
                     setTimeout(() => {
                         //Nhap Mật khẩu
-                        $('form input[name=Passwd]').bind('autotyped', function () {
-                        }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
+                        /* $('form input[name=Passwd]').bind('autotyped', function () {
+                        }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) }); */
+                        $('form input[name=Passwd]').val(sPassWord);
 
                         showNotyBottom('Chờ nhập lại password: ' + sPassWord);
                         setTimeout(() => {
                             //Nhap Lại Mật khẩu
-                            $('form input[name=ConfirmPasswd]').bind('autotyped', function () {
-                            }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) });
+                            /* $('form input[name=ConfirmPasswd]').bind('autotyped', function () {
+                            }).autotype(sPassWord, { delay: randomIntFromRange(80, 200) }); */
+                            $('form input[name=ConfirmPasswd]').val(sPassWord);
 
                             showNotyBottom('Chờ bật hiện thị mật khẩu');
                             setTimeout(() => {
@@ -173,24 +181,34 @@ jQuery(document).ready(function ($) {
                                 setTimeout(() => {
                                     if ($('button.nCP5yc')) {
                                         $('button.nCP5yc').click();
+
+                                        setTimeout(() => {
+                                            var currentUrl = window.location.href;
+                                            if (!currentUrl.includes('webcreateaccount')) {
+                                                /*********************/
+                                                //Xử lý lấy số điện thoại
+                                                getPhoneAPI(sEmailRecovery);
+                                                /*********************/
+                                            } else {
+                                                showNotyTop("Đã có lỗi khi nhập thông tin đăng ký, đang chuyển trang", '', 'error');
+                                                setTimeout(() => {
+                                                    window.location.href = 'https://' + sGo;
+                                                }, sTe + 1000);
+                                            }
+                                        }, sTe + 1000);
                                     }
 
-                                    /*********************/
-                                    //Xử lý lấy số điện thoại
-                                    getPhoneAPI(sEmailRecovery);
-                                    /*********************/
+                                }, sTe + 1000);
 
-                                }, 7000);
+                            }, sTe + 2000);
 
-                            }, 7000);
+                        }, sTe + 2000)
 
-                        }, 10000)
+                    }, sTe + 2000)
 
-                    }, 15000)
+                }, sTe + 2000);
 
-                }, 10000);
-
-            }, 10000);
+            }, sTe + 2000);
 
         }, 10000);
     }
@@ -307,7 +325,7 @@ jQuery(document).ready(function ($) {
             if ($('li.VfPpkd-StrnGf-rymPhb-ibnC6b[data-value=vn]')) {
                 $('li.VfPpkd-StrnGf-rymPhb-ibnC6b[data-value=vn]').click();
             }
-        }, 1000 * 4);
+        }, sTe);
 
         setTimeout(() => {
             //Nhập số điện thoại
@@ -315,8 +333,9 @@ jQuery(document).ready(function ($) {
                 $('#phoneNumberId').val('');
                 showNotyBottom('Đang nhập số: ' + '<span class="color-yellow">' + sNumGeted + '<span>');
                 setTimeout(() => {
-                    $('#phoneNumberId').bind('autotyped', function () {
-                    }).autotype(sNumGeted, { delay: randomIntFromRange(80, 200) });
+                    /* $('#phoneNumberId').bind('autotyped', function () {
+                    }).autotype(sNumGeted, { delay: randomIntFromRange(80, 200) }); */
+                    $('#phoneNumberId').val(sNumGeted);
 
                     showNotyBottom('Chờ ấn Button tiếp theo');
                     setTimeout(() => {
@@ -343,10 +362,10 @@ jQuery(document).ready(function ($) {
                                 }
                             }, sTe);
                         }
-                    }, 8000);
+                    }, sTe + 3000);
                 }, 2000);
             }
-        }, 1000 * 7);
+        }, sTe + 2500);
     }
 
     //Xử lý Get Code
@@ -384,8 +403,9 @@ jQuery(document).ready(function ($) {
                                 if (sCodeNum) {
                                     $('input#code').click();
                                     setTimeout(() => {
-                                        $('input#code').bind('autotyped', function () {
-                                        }).autotype(sCodeNum, { delay: randomIntFromRange(80, 200) });
+                                        /* $('input#code').bind('autotyped', function () {
+                                        }).autotype(sCodeNum, { delay: randomIntFromRange(80, 200) }); */
+                                        $('input#code').val(sCodeNum);
                                     }, 1000);
 
                                     setTimeout(() => {
@@ -398,7 +418,7 @@ jQuery(document).ready(function ($) {
                                             enterInfoDetails(sEmailRecovery);
                                             /*********************/
                                         }
-                                    }, 7000);
+                                    }, sTe + 2000);
                                 }
                             } else {
                                 showNotyBottom("Lấy code Thất bại, chờ lấy lại. Thử lại lần: " + window.sNumGetCode, "error");
@@ -440,16 +460,18 @@ jQuery(document).ready(function ($) {
                 showNotyBottom('Nhập email khôi phục: ' + sEmailRecovery);
                 setTimeout(() => {
                     //Nhap email khoi phuc
-                    $('input[name=recoveryEmail]').bind('autotyped', function () {
-                    }).autotype(sEmailRecovery, { delay: randomIntFromRange(80, 200) });
+                    /* $('input[name=recoveryEmail]').bind('autotyped', function () {
+                    }).autotype(sEmailRecovery, { delay: randomIntFromRange(80, 200) }); */
+                    $('input[name=recoveryEmail]').val(sEmailRecovery);
 
                     showNotyBottom('Nhập ngày sinh: ' + sDay);
                     setTimeout(() => {
                         //Nhap ngay sinh
                         $('input[name=day]').val("");
                         setTimeout(() => {
-                            $('input[name=day]').bind('autotyped', function () {
-                            }).autotype(sDay, { delay: randomIntFromRange(80, 200) });
+                            /* $('input[name=day]').bind('autotyped', function () {
+                            }).autotype(sDay, { delay: randomIntFromRange(80, 200) }); */
+                            $('input[name=day]').val(sDay);
 
                             showNotyBottom('Nhập tháng sinh: ' + sMonth);
                             setTimeout(() => {
@@ -479,21 +501,21 @@ jQuery(document).ready(function ($) {
                                                     googleTerms();
                                                     /*********************/
                                                 }
-                                            }, 10000);
+                                            }, sTe * 2);
 
-                                        }, 8000);
+                                        }, sTe + 2000);
 
-                                    }, 8000);
+                                    }, sTe + 2000);
 
-                                }, 8000);
+                                }, sTe + 2000);
 
-                            }, 8000);
+                            }, sTe + 2000);
 
-                        }, 8000);
+                        }, sTe + 2000);
 
-                    }, 12000);
+                    }, sTe + 2000);
 
-                }, 8000);
+                }, sTe + 2000);
             }
         }, sTe);
     }
