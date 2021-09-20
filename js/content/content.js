@@ -252,6 +252,20 @@ jQuery(document).ready(function ($) {
 
                         //Kiểm tra số lấy được có nằm trong danh sách số die không
                         if (sPhoneDie.includes(sNumGeted.replace('+84', ''))) {
+                            //Hủy đợi tin nhắn trên API
+                            $.ajax({
+                                type: 'GET',
+                                url: dUrlCancelWaitMes + sIdGeted,
+                                success: function (data) {
+                                    console.log("Hủy đợi tin nhắn: SUCCESS");
+                                    console.log('**************');
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log("Hủy đợi tin nhắn: ERROR");
+                                    console.log('**************');
+                                }
+                            })
+
                             window.enteringPhone = false;
                             showNotyBottom('Số: ' + '<span class="color-yellow">' + sNumGeted + '</span>' + ' đã nằm trong danh sách die, Chờ lấy số khác.');
                             /**************************/
